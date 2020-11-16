@@ -11,5 +11,9 @@ namespace WeatherKit.Models
         public string StateCode { get; set; }
 
         public string ZipCode { get; set; }
+
+        public long Longitude { get; set; }
+
+        public long Latitude { get; set; }
     }
 }
