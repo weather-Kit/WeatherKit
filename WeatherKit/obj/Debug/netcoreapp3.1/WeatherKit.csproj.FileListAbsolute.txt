@@ -1,7 +1,5 @@
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.AssemblyInfoInputs.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.AssemblyInfo.cs
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CoreCompileInputs.cache
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.MvcApplicationPartsAssemblyInfo.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorAssemblyInfo.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorAssemblyInfo.cs
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\appsettings.Development.json
@@ -34,3 +32,7 @@ D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\ob
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.pdb
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.genruntimeconfig.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CopyComplete
+D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csprojAssemblyReference.cache
+D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CoreCompileInputs.cache
+D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.MvcApplicationPartsAssemblyInfo.cache

@@ -24,6 +24,14 @@ namespace WeatherKit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Now let's register an API client for your AJAX call.
+            // Includes the configuration - base address & content type.
+            services.AddHttpClient("API Client", client =>
+            {
+                client.BaseAddress = new Uri("http://api.openweathermap.org/data/2.5/weather");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
