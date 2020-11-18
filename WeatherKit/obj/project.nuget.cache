@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "fzsWZPOPx89UnpiK1vjSiMvYl04jf8bZDRFWSV/gLmu+y26W/B/+VDwf/u0UMdRKu+YIUiFt5bkV/Uvo1eDTWg==",
+  "dgSpecHash": "GJ6pGHQOKOOACHv2LE8AIPjQPYiSbCMROBosMgp0SKoUqkm0N/tfGjdkmWg1pZU3eDsCfOzoo9eHdqbsczMcGw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\carln\\source\\repos\\WeatherKit\\WeatherKit.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "D:\\Bachelors\\BellevueCollege\\Fall 2020\\ISIT-320\\Project\\WeatherKit\\WeatherKit\\WeatherKit.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Trupti\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
