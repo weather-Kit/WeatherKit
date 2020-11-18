@@ -8,23 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Trupti\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\dylan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Bachelors\\BellevueCollege\\Fall 2020\\ISIT-320\\Project\\WeatherKit\\WeatherKit_Library\\WeatherKit_Library.csproj",
+      "projectUniqueName": "C:\\Users\\dylan\\source\\repos\\WeatherKit\\WeatherKit_Library\\WeatherKit_Library.csproj",
       "projectName": "WeatherKit_Library",
-      "projectPath": "D:\\Bachelors\\BellevueCollege\\Fall 2020\\ISIT-320\\Project\\WeatherKit\\WeatherKit_Library\\WeatherKit_Library.csproj",
-      "packagesPath": "C:\\Users\\Trupti\\.nuget\\packages\\",
-      "outputPath": "D:\\Bachelors\\BellevueCollege\\Fall 2020\\ISIT-320\\Project\\WeatherKit\\WeatherKit_Library\\obj\\",
+      "projectPath": "C:\\Users\\dylan\\source\\repos\\WeatherKit\\WeatherKit_Library\\WeatherKit_Library.csproj",
+      "packagesPath": "C:\\Users\\dylan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dylan\\source\\repos\\WeatherKit\\WeatherKit_Library\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Trupti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dylan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -62,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

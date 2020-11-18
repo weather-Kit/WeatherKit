@@ -36,3 +36,41 @@ D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\bi
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csprojAssemblyReference.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CoreCompileInputs.cache
 D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.exe
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.deps.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.runtimeconfig.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.runtimeconfig.dev.json
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.dll
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.pdb
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.Views.dll
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\WeatherKit.Views.pdb
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csprojAssemblyReference.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.AssemblyInfoInputs.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.AssemblyInfo.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CoreCompileInputs.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorAssemblyInfo.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorAssemblyInfo.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.TagHelpers.input.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.TagHelpers.output.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorCoreGenerate.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorTargetAssemblyInfo.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.RazorTargetAssemblyInfo.cs
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.Views.pdb
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.csproj.CopyComplete
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\staticwebassets\WeatherKit.StaticWebAssets.Manifest.cache
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\staticwebassets\WeatherKit.StaticWebAssets.xml
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.dll
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.pdb
+C:\Users\dylan\source\repos\WeatherKit\WeatherKit\obj\Debug\netcoreapp3.1\WeatherKit.genruntimeconfig.cache
