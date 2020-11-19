@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherKit", "WeatherKit.csproj", "{4AB266C8-D35A-466B-9322-35CEB3627E74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherKit", "WeatherKit.csproj", "{4AB266C8-D35A-466B-9322-35CEB3627E74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherKit_Library", "..\WeatherKit_Library\WeatherKit_Library.csproj", "{6EA898F7-54C4-483F-8F1D-4D0F1DF63150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherKit_Library", "..\WeatherKit_Library\WeatherKit_Library.csproj", "{6EA898F7-54C4-483F-8F1D-4D0F1DF63150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
