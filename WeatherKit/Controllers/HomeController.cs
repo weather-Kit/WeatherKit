@@ -34,6 +34,17 @@ namespace WeatherKit.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async void GetWeatherDetails(string cityState, string zipCode)
+        {
+            LocationInput li = new LocationInput();
+            li.City = cityState;
+            li.ZipCode = zipCode;
+            var weatherForecast = await GetWeatherForecasts(li);
+
+            li.Forecast = weatherForecast;
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

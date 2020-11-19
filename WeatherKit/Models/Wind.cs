@@ -2,9 +2,9 @@
 {
     public class Wind
     {
-        double Speed { get; set; }
-
+        public double speed { get; set; }
         // Wind direction: Degrees
-        int Deg { get; set; }
+        public int deg { get; set; }
+        public double gust { get; set; }
     }
 }
