@@ -2,14 +2,11 @@
 {
     public class Weather
     {
-        int Id { get; set; }
-
+        public int id { get; set; }
         // Example: Rain
-        string Main { get; set; }
-
+        public string main { get; set; }
         // Example: moderate rain
-        string Description { get; set; }
-
-        string Icon { get; set; }
+        public string description { get; set; }
+        public string icon { get; set; }
     }
 }

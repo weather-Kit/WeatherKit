@@ -3,6 +3,6 @@
     public class Clouds
     {
         // Cloudiness, %
-        int All { get; set; }
+        public int all { get; set; }
     }
 }
