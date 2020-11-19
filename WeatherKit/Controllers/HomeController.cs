@@ -38,7 +38,7 @@ namespace WeatherKit.Controllers
             li.ZipCode = zipCode;
             var weatherForecast = await GetWeatherForecasts(li);
 
-            li.Forecast = weatherForecast;
+            /*Forecast = weatherForecast;*/
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
