@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WeatherKit.Services;
 
 namespace WeatherKit
 {
@@ -32,6 +33,9 @@ namespace WeatherKit
                 client.BaseAddress = new Uri("http://api.openweathermap.org/data/2.5/weather");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+
+            // Add SettingService as DependencyInjection
+            services.AddSingleton<ISettingService, SettingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
