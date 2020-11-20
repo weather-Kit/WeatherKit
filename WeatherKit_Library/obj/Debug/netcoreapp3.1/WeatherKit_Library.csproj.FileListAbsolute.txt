@@ -1,8 +1,0 @@
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\bin\Debug\netcoreapp3.1\WeatherKit_Library.deps.json
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\bin\Debug\netcoreapp3.1\WeatherKit_Library.dll
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\bin\Debug\netcoreapp3.1\WeatherKit_Library.pdb
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\obj\Debug\netcoreapp3.1\WeatherKit_Library.AssemblyInfoInputs.cache
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\obj\Debug\netcoreapp3.1\WeatherKit_Library.AssemblyInfo.cs
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\obj\Debug\netcoreapp3.1\WeatherKit_Library.csproj.CoreCompileInputs.cache
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\obj\Debug\netcoreapp3.1\WeatherKit_Library.dll
-D:\Bachelors\BellevueCollege\Fall 2020\ISIT-320\Project\WeatherKit\WeatherKit_Library\obj\Debug\netcoreapp3.1\WeatherKit_Library.pdb
