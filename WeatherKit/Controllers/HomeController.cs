@@ -76,7 +76,7 @@ namespace WeatherKit.Controllers
                 if (setting.Units != Units.Standard)
                 {
                     string unitType = setting.Units == Units.Imperial ? "imperial" : "metric";
-                    builder.Query = $"units={}";
+                    builder.Query = $"units={unitType}";
                 }
 
                 builder.Query += "&appid=1e94cd79afa39de4db034e687033b2de";
