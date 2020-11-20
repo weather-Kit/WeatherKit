@@ -71,6 +71,14 @@ namespace WeatherKit.Controllers
 
             if (builder.Query.Length > 0)
             {
+                Setting setting = new Setting();
+
+                if (setting.Units != Units.Standard)
+                {
+                    string unitType = setting.Units == Units.Imperial ? "imperial" : "metric";
+                    builder.Query = $"units={}";
+                }
+
                 builder.Query += "&appid=1e94cd79afa39de4db034e687033b2de";
 
                 // Get the HttpClient & make the request call
