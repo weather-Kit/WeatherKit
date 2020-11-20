@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WeatherKit.Models;
+using WeatherKit.Services;
 
 namespace WeatherKit.Controllers
 {
@@ -13,11 +14,14 @@ namespace WeatherKit.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ISettingService _settingService;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, 
+            ISettingService settingService)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
+            _settingService = settingService;
         }
 
         public IActionResult Index()
@@ -71,7 +75,7 @@ namespace WeatherKit.Controllers
 
             if (builder.Query.Length > 0)
             {
-                Setting setting = new Setting();
+                Setting setting = _settingService.GetSetting();
 
                 if (setting.Units != Units.Standard)
                 {
