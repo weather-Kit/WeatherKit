@@ -30,6 +30,7 @@ namespace WeatherKit.Services
 
         private void ReadSetting()
         {
+
             // Read Setting from cookie
         }
     }
