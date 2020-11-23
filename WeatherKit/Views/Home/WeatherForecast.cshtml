@@ -3,8 +3,15 @@
 }
 @model WeatherKit.Models.Forecast
 <tr>
+    <td>@Model.name</td>
     <td>@Model.weather</td>
     <td>@Model.main.temp</td>
+    <td>@Model.main.temp_min</td>
+    <td>@Model.main.temp_max</td>
     <td>@Model.main.feels_like</td>
+    <td>@Model.coord</td>
+    <td>@Model.clouds</td>
+    <td>@Model.visibility</td>
+
 </tr>
 
