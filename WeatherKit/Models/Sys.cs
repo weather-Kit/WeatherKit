@@ -2,10 +2,10 @@
 {
     public class Sys
     {
-        int Type { get; set; }
-        int Id { get; set; }
-        string Country { get; set; }
-        long Sunrise { get; set; }
-        long Sunset { get; set; }
+        public int type { get; set; }
+        public int id { get; set; }
+        public string country { get; set; }
+        public int sunrise { get; set; }
+        public int sunset { get; set; }
     }
 }

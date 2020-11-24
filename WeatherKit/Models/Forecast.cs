@@ -1,33 +1,26 @@
-﻿namespace WeatherKit.Models
+﻿using System.Collections.Generic;
+
+namespace WeatherKit.Models
 {
     public class Forecast
     {
-        public Coordinates Coord {get; set;}
-        public Weather WeatherConditions { get; set; }
-        public string Base { get; set; }
-        public Main TempDetails { get; set; }
-        public int Visibility { get; set; }
-        public Wind WindDetails { get; set; }
-        public Rain RainVolume { get; set; }
-        public Clouds ClodinessPercentage{ get; set; }
-
+        public Coord coord { get; set; }
+        public List<Weather> weather { get; set; }
+        public string @base { get; set; }
+        public Main main { get; set; }
+        public int visibility { get; set; }
+        public Wind wind { get; set; }
+        public Clouds clouds { get; set; }
         //Time of data calculation, unix, UTC
-        public long Dt { get; set; }
-
+        public int dt { get; set; }
         // Example: Country Code, Sunrise/Sunset time
-        public Sys OtherDetails { get; set; }
-
+        public Sys sys { get; set; }
         // UTC
-        public int Timezone { get; set; }
-
+        public int timezone { get; set; }
         // City ID
-        public int Id { get; set; }
-
+        public int id { get; set; }
         // City Name
-        public string Name { get; set; }
-
-        public int Cod { get; set; }
+        public string name { get; set; }
+        public int cod { get; set; }
     }
-
-
 }

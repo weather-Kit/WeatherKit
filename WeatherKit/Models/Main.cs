@@ -2,16 +2,11 @@
 {
     public class Main
     {
-        double Temp { get; set; }
-
-        double Feels_Like { get; set; }
-
-        double Temp_Min { get; set; }
-
-        double Temp_Max { get; set; }
-
-        int Pressure { get; set; }
-
-        int Humidity { get; set; }
+        public double temp { get; set; }
+        public double feels_like { get; set; }
+        public double temp_min { get; set; }
+        public double temp_max { get; set; }
+        public int pressure { get; set; }
+        public int humidity { get; set; }
     }
 }
