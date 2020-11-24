@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "GetWeatherDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model WeatherKit.Models.Forecast
+<tr>
+    <td>@Model.weather</td>
+    <td>@Model.main.temp</td>
+    <td>@Model.main.feels_like</td>
+</tr>
+
