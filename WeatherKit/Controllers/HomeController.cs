@@ -105,7 +105,7 @@ namespace WeatherKit.Controllers
                     // Read all of the response and deserialise it into an instace of
                     // Forecast class
                     var content = await result.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<Forecast>(content); ;
+                    return JsonConvert.DeserializeObject<Forecast>(content);
                 }
             }
 
