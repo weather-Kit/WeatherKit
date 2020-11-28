@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WeatherKit.Models
 {
@@ -12,16 +13,19 @@ namespace WeatherKit.Models
         public Wind wind { get; set; }
         public Clouds clouds { get; set; }
         //Time of data calculation, unix, UTC
-        public int dt { get; set; }
+        public long dt { get; set; }
         // Example: Country Code, Sunrise/Sunset time
         public Sys sys { get; set; }
-        // UTC
+        // Shift in seconds from UTC (eg. -28800 == PST)
         public int timezone { get; set; }
         // City ID
         public int id { get; set; }
         // City Name
         public string name { get; set; }
-        public int cod { get; set; }
+        public int cod { get; set; }    // ignore
+
+        public DateTime Date { get; set; }
+
     }
 }
  
