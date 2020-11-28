@@ -15,13 +15,15 @@ namespace WeatherKit.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ISettingService _settingService;
+        private readonly ILocationService _locationService;
 
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, 
-            ISettingService settingService)
+            ISettingService settingService, ILocationService locationService)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _settingService = settingService;
+            _locationService = locationService;
         }
 
         public IActionResult Index()
@@ -121,6 +123,5 @@ namespace WeatherKit.Controllers
 
             return await client.GetAsync(builder.Uri);
         }
-
     }
 }

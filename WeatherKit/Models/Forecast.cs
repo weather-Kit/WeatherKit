@@ -24,3 +24,4 @@ namespace WeatherKit.Models
         public int cod { get; set; }
     }
 }
+ 

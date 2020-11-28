@@ -1,12 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using WeatherKit.Models;
 
 namespace WeatherKit.Services
 {
-    public class LocationService
+    public class LocationService : ILocationService
     {
-        private 
+        private LocationInput Location;
+
+        public LocationService()
+        {
+            Location = new LocationInput();
+        }
+
+        public LocationInput GetLocation()
+        {
+            return Location;
+        }
+
+        public void UpdateLocation(LocationInput newLocation)
+        {
+            Location = newLocation;
+        }
     }
 }

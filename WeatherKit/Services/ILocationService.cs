@@ -2,8 +2,9 @@
 
 namespace WeatherKit.Services
 {
-    interface ILocationService
+    public interface ILocationService
     {
         public LocationInput GetLocation();
+        public void UpdateLocation(LocationInput newLocation);
     }
 }
