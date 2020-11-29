@@ -10,13 +10,15 @@ namespace WeatherKit.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISettingService _settingService;
+        private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
 
         public HomeController(ILogger<HomeController> logger, 
-            ISettingService settingService, IWeatherAPIService weatherAPIService)
+            ISettingService settingService, IWeatherAPIService weatherAPIService, ILocationService locationService)
         {
             _logger = logger;
             _settingService = settingService;
+            _locationService = locationService;
             _weatherAPIService = weatherAPIService;
         }
 

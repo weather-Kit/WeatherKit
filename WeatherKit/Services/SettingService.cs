@@ -1,4 +1,5 @@
-﻿using WeatherKit.Models;
+﻿using Microsoft.AspNetCore.Http;
+using WeatherKit.Models;
 
 namespace WeatherKit.Services
 {
@@ -14,7 +15,6 @@ namespace WeatherKit.Services
         public SettingService(Setting setting)
         {
             currentSetting = setting;
-            ReadSetting();  // Get stored settings values
         }
 
         public Setting GetSetting()
@@ -24,13 +24,20 @@ namespace WeatherKit.Services
 
         public void UpdateSetting(Setting setting)
         {
+            //update currentSetting with external setting object
             currentSetting = setting;
-            // Store updated values in cookie
         }
 
-        private void ReadSetting()
+        public void ReadSetting(HttpContext context)
         {
-            // Read Setting from cookie
+            currentSetting.Is24HourTimeFormat = bool.Parse(context.Request.Cookies["Is24HourTimeFormat"]);
+            currentSetting.Units = (Units)int.Parse(context.Request.Cookies["Units"]);
+        }
+
+        public void WriteSetting(HttpContext context)
+        {
+            context.Response.Cookies.Append("Is24HourTimeFormat", currentSetting.Is24HourTimeFormat.ToString());
+            context.Response.Cookies.Append("Units", ((int)currentSetting.Units).ToString());
         }
     }
 }

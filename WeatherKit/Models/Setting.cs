@@ -12,7 +12,7 @@
 
         public Setting()
         {
-            Units = Units;
+            Units = Units; //???
         }
     }
 
