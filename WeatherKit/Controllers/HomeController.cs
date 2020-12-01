@@ -35,12 +35,16 @@ namespace WeatherKit.Controllers
         }
 
         [HttpGet]
-        public async void GetWeatherDetails(string cityState, string zipCode)
+        public async Task<IActionResult> GetWeatherDetails(string cityState, string zipCode)
         {
             LocationInput li = new LocationInput();
             li.City = cityState;
             li.ZipCode = zipCode;
-            var weatherForecast = await GetWeatherForecasts(li);
+            var weatherForecast = await Task.Run(() => GetWeatherForecasts(li));
+
+            
+
+            return View("GetWeatherDetails", weatherForecast);
 
             /*Forecast = weatherForecast;*/
         }
@@ -91,7 +95,7 @@ namespace WeatherKit.Controllers
                 if (setting.Units != Units.Standard)
                 {
                     string unitType = setting.Units == Units.Imperial ? "imperial" : "metric";
-                    builder.Query = $"units={unitType}";
+                    builder.Query += $"&units={unitType}";
                 }
 
                 builder.Query += "&appid=1e94cd79afa39de4db034e687033b2de";

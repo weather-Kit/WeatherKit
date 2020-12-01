@@ -3,10 +3,22 @@
     ViewData["Title"] = "GetWeatherDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @model WeatherKit.Models.Forecast
-<tr>
-    <td>@Model.weather</td>
-    <td>@Model.main.temp</td>
-    <td>@Model.main.feels_like</td>
-</tr>
+    <div class="text-center">
+        <H1>In the Town of @Model.name </H1>  
+            
+        <p>The Weather is: @Model.weather[0].description </p>
+            
+        <p>The temperature is: @Model.main.temp degrees</p>
+
+        <p>But it Feels like: @Model.main.feels_like degrees</p>
+
+        <p>The Humidity is:  @Model.main.humidity% </p>
+
+        <p>The Wind speed is: @Model.wind.speed mph</p>
+            
+            
+        
+    </div>
 
