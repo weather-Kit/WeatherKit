@@ -5,7 +5,7 @@
 }
 
 @model WeatherKit.Models.Forecast
-    <div class="text-center">
+    <div class="text-center" id="box">
         <H1>In the Town of @Model.name </H1>  
             
         <p>The Weather is: @Model.weather[0].description </p>
@@ -17,6 +17,8 @@
         <p>The Humidity is:  @Model.main.humidity% </p>
 
         <p>The Wind speed is: @Model.wind.speed mph</p>
+
+        <p>The Time Zone is: @Model.timezone</p>
             
             
         

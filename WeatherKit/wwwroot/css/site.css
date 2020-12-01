@@ -58,7 +58,10 @@ html {
   min-height: 100%;
 }
 
-
+#box{
+    box-sizing:border-box;
+    color:cornflowerblue
+}
 
 
 body {
