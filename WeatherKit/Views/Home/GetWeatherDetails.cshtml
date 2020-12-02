@@ -5,22 +5,30 @@
 }
 
 @model WeatherKit.Models.Forecast
-    <div class="text-center" id="box">
-        <H1>In the Town of @Model.name </H1>  
-            
-        <p>The Weather is: @Model.weather[0].description </p>
-            
-        <p>The temperature is: @Model.main.temp degrees</p>
+<div>
+    <H1 class="display-4">@Model.name </H1>
 
-        <p>But it Feels like: @Model.main.feels_like degrees</p>
+    <p>The Weather is: @Model.weather[0].description </p>
 
-        <p>The Humidity is:  @Model.main.humidity% </p>
+    @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+    }
+    <img src="@img" />
 
-        <p>The Wind speed is: @Model.wind.speed mph</p>
+    <p>The temperature is: @Model.main.temp degrees</p>
 
-        <p>The Time Zone is: @Model.timezone</p>
-            
-            
-        
-    </div>
+
+
+
+    <p>But it Feels like: @Model.main.feels_like degrees</p>
+
+    <p>The Humidity is:  @Model.main.humidity% </p>
+
+    <p>The Wind speed is: @Model.wind.speed mph</p>
+
+    <p>The Time is: </p>
+    @Model.sys.country
+
+
+
+</div>
 

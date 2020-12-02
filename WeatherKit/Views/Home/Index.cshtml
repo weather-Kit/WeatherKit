@@ -2,12 +2,17 @@
 
 @{ ViewData["Title"] = "Home Page"; }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Weatherkit</h1>
+<h1 class="display-4 text-center">City Weather Report</h1>
+
+<div class="jumbotron bg-light" style="width:359px">
+    
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" id="box">
-        <input type="text" name="cityState" placeholder="City">
-        <p> or </p>
-        <input type="text" name="zipCode" placeholder="Zip Code"><br />
-        <input id="submit" type="submit" value="Submit" />
+        <input type="text" name="cityState" placeholder="City" class="container bg-white" style="height:50px">
+        <p style="font-size:18px" class="text"> or </p>
+        <input type="text" name="zipCode" placeholder="Zip Code" class="container bg-white" style="height:50px"><br />
+        <p></p>
+        <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>   <br />
+        <input class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
     </form>
+
 </div>
