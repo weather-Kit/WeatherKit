@@ -42,6 +42,19 @@ namespace WeatherKit.Controllers
             li.ZipCode = zipCode;
 
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
+            string time = "";
+            if (_settingService.GetSetting().Is24HourTimeFormat)
+            {
+                time = weatherForecast.Date.ToString("HH:mm");
+            }
+
+ 
+            else
+            {
+                time = weatherForecast.Date.ToString("hh:mm:tt");
+            }
+            ViewBag.Time = time;
+
 
             return View("GetWeatherDetails", weatherForecast);
             /*Forecast = weatherForecast;*/
