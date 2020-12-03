@@ -18,7 +18,7 @@ namespace WeatherKit.Services
         }
 
         public void UpdateLocation(LocationInput newLocation)
-        {
+        { 
             currentLocation = newLocation;
         }
 
@@ -27,12 +27,17 @@ namespace WeatherKit.Services
             currentLocation.City = context.Request.Cookies["City"];
             currentLocation.StateCode = context.Request.Cookies["StateCode"];
             currentLocation.ZipCode = context.Request.Cookies["ZipCode"];
-            currentLocation.Latitude = long.Parse(context.Request.Cookies["Latitude"]);
-            currentLocation.Longitude = long.Parse(context.Request.Cookies["Longitude"]);
+            if (!(context.Request.Cookies["Latitude"] is null) && !(context.Request.Cookies["Longitude"] is null))
+            {
+                currentLocation.Latitude = long.Parse(context.Request.Cookies["Latitude"]);
+                currentLocation.Longitude = long.Parse(context.Request.Cookies["Longitude"]);
+            }
+
         }
 
         public void WriteLocation(HttpContext context)
         {
+            
             context.Response.Cookies.Append("City", currentLocation.City);
             context.Response.Cookies.Append("StateCode", currentLocation.StateCode);
             context.Response.Cookies.Append("ZipCode", currentLocation.ZipCode);
