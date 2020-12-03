@@ -70,7 +70,6 @@
             @Html.DisplayNameFor(model => model.coord)
         </dt>
         <dd class="col-sm-10">
-           // @Html.DisplayFor(model => model.coord.lon)
             Long: @Model.coord.lon ',  Lat: ' @Model.coord.lat
         </dd>
         <dt class="col-sm-2">
@@ -79,6 +78,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
+        <br />
+        @{
+            long timeStamp = 1607037434;    // Seatte time 15:20
+            timeStamp += -18000;
+            // DateTime object for UTC 
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            // Add the timestamp 
+            dateTime = dateTime.AddSeconds(timeStamp);
+
+            @dateTime
+
+        }
     </dl>
 </div>
 <div>
