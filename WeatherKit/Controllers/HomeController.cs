@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WeatherKit.Models;
@@ -33,15 +34,26 @@ namespace WeatherKit.Controllers
         }
 
         [HttpGet]
-        public async void GetWeatherDetails(string cityState, string zipCode)
+        public async Task<IActionResult> GetWeatherDetails(string cityState, string zipCode)
         {
             LocationInput li = new LocationInput();
+            //******** Test with city name, zipcode - WORKING
             li.City = cityState;
             li.ZipCode = zipCode;
-            var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
 
-            return;
-            /*Forecast = weatherForecast;*/
+            var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
+            if (weatherForecast == null)
+            {
+                ViewBag.InvalidMsg = "Incorrect location or format.";
+                return View("Index");
+            }
+
+            ViewBag.URL = _weatherAPIService.GetURL();
+            ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+            ViewBag.TimeZoneName = _weatherAPIService.GetTimeZone();
+            ViewBag.TimeZoneInfo = _weatherAPIService.GetTimeZoneInfo().DisplayName;
+
+            return View("GetWeatherDetails", weatherForecast);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
