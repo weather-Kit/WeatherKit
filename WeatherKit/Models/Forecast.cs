@@ -25,6 +25,7 @@ namespace WeatherKit.Models
         public int cod { get; set; }    // ignore
 
         public DateTime Date { get; set; }
+        public string TimeZone { get; set; }
 
     }
 }

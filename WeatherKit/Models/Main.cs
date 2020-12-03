@@ -12,5 +12,8 @@
         
         // Humidity %
         public int humidity { get; set; }
+
+        // Units for the temperature
+        public string TempUnit { get; set; }
     }
 }

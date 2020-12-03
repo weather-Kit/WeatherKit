@@ -1,5 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Splash Page";
 }
 
-<script src="~/js/LocationService.js"></script>
+<script>
+    function setCookies(position) {
+        document.cookie = 'latitude=' + position.coords.latitude;
+        document.cookie = 'longitude=' + position.coords.longitude;
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setCookies);
+    }
+</script>

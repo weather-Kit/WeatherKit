@@ -26,7 +26,7 @@ namespace WeatherKit
         {
             services.AddControllersWithViews();
 
-            // Now let's register an API client for your AJAX call.
+            // Register an API client for AJAX call.
             // Includes the configuration - base address & content type.
             services.AddHttpClient("API Client", client =>
             {
@@ -34,7 +34,7 @@ namespace WeatherKit
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
-            // Add SettingService as DependencyInjection
+            // Add services as DependencyInjection
             services.AddSingleton<ISettingService, SettingService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IWeatherAPIService, WeatherAPIService>();

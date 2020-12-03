@@ -13,6 +13,9 @@ namespace WeatherKit.Services
         private readonly string meterBySecUnit = "meter/sec";
         private readonly string milesByhourUnit = "miles/hour";
 
+        public string JSONContent { get; set; }
+        private string URL, timeZone;
+        private TimeZoneInfo tst;
 
         public WeatherAPIService(IHttpClientFactory httpClientFactory,
             ISettingService settingService)
@@ -21,11 +24,24 @@ namespace WeatherKit.Services
             _settingService = settingService;
         }
 
+        public string GetJSONContent()
+        {
+            return JSONContent;
+        }
+        public string GetURL()
+        {
+            return URL;
+        }
+        public string GetTimeZone()  { return timeZone;   }
+        public TimeZoneInfo GetTimeZoneInfo() { return tst; }
+
+
         /*
-          * api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-             api.openweathermap.org/data/2.5/weather?q={city name},{state code}&appid={API key}
-             api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-             api.openweathermap.org/data/2.5/weather?zip={zip code}&appid={API key}
+          * api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}   - WORKING
+             api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}      - WORKING
+             api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}    - WORKING
+             api.openweathermap.org/data/2.5/weather?zip={zip code}&appid={API key}     - WORKING
+        add time query 
         * */
         public async Task<Forecast> GetWeatherForecasts(LocationInput locationInput)
         {
@@ -38,9 +54,9 @@ namespace WeatherKit.Services
             {
                 builder.Query = $"q={locationInput.City}";
 
-                if (!string.IsNullOrEmpty(locationInput.StateCode))
+                if (!string.IsNullOrEmpty(locationInput.StateCode) && !string.IsNullOrEmpty(locationInput.CountryCode))
                 {
-                    builder.Query += $",{locationInput.StateCode}";
+                    builder.Query += $",{locationInput.StateCode},{locationInput.CountryCode}";
                 }
             }
             // If GeoLocation is provided
@@ -69,12 +85,14 @@ namespace WeatherKit.Services
                 // Get the HttpClient & make the request call
                 HttpClient client = _httpClientFactory.CreateClient("API Client");
                 var result = await client.GetAsync(builder.Uri);
+                URL = builder.Query;
 
                 if (result.IsSuccessStatusCode)
                 {
                     // Read all of the response and deserialise it into an instace of
                     // Forecast class
                     var content = await result.Content.ReadAsStringAsync();
+                    JSONContent = content;
                     Forecast forecast = JsonConvert.DeserializeObject<Forecast>(content);
 
                     if (forecast != null)
@@ -87,11 +105,13 @@ namespace WeatherKit.Services
                         {
                             forecast.wind.GustUnit = meterBySecUnit;
                             forecast.wind.SpeedUnit = meterBySecUnit;
+                            forecast.main.TempUnit = "C";
                         }
                         else if (setting.Units == Units.Imperial)
                         {
                             forecast.wind.GustUnit = milesByhourUnit;
                             forecast.wind.SpeedUnit = milesByhourUnit;
+                            forecast.main.TempUnit = "F";
                         }
                     }
 
@@ -112,8 +132,12 @@ namespace WeatherKit.Services
             // Get Local timezone name 
             string timeZoneName = TimeZoneInfo.Local.IsDaylightSavingTime(dateTime) ?
                         TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName;
+            
+            // Set timeZone
+            timeZone = timeZoneName;
+
             // Find TimeZoneInfo
-            TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
+            tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
             // Convvert UTC to TimeZone
             DateTime converted = TimeZoneInfo.ConvertTimeFromUtc(dateTime, tst);
 
