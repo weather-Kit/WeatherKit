@@ -59,7 +59,6 @@ namespace WeatherKit.Controllers
                 Forecast newForecast = _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation()).Result;
                 return View("GetWeatherDetails", newForecast);
             }
-            
         }
     }
 }
