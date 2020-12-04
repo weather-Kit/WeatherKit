@@ -14,8 +14,7 @@ namespace WeatherKit.Services
         private readonly string milesByhourUnit = "miles/hour";
 
         public string JSONContent { get; set; }
-        private string URL, timeZone;
-        private TimeZoneInfo tst;
+        private string URL;
 
         public WeatherAPIService(IHttpClientFactory httpClientFactory,
             ISettingService settingService)
@@ -32,16 +31,12 @@ namespace WeatherKit.Services
         {
             return URL;
         }
-        public string GetTimeZone()  { return timeZone;   }
-        public TimeZoneInfo GetTimeZoneInfo() { return tst; }
-
 
         /*
           * api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}   - WORKING
              api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}      - WORKING
              api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}    - WORKING
              api.openweathermap.org/data/2.5/weather?zip={zip code}&appid={API key}     - WORKING
-        add time query 
         * */
         public async Task<Forecast> GetWeatherForecasts(LocationInput locationInput)
         {
@@ -65,7 +60,7 @@ namespace WeatherKit.Services
                 builder.Query = $"lat={locationInput.Latitude}&lon={locationInput.Longitude}";
             }
             // If zipcode is provided
-            else if (!string.IsNullOrEmpty(locationInput.ZipCode.Trim()))
+            else if (!string.IsNullOrEmpty(locationInput.ZipCode))
             {
                 builder.Query = $"zip={locationInput.ZipCode}";
             }
@@ -97,9 +92,9 @@ namespace WeatherKit.Services
 
                     if (forecast != null)
                     {
-                        forecast.Date = ConvertUnixTimestampToDate(forecast.dt);
-                        forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise);
-                        forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset);
+                        forecast.Date = ConvertUnixTimestampToDate(forecast.dt, forecast.timezone);
+                        forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise, forecast.timezone);
+                        forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset, forecast.timezone);
 
                         if (setting.Units == Units.Standard || setting.Units == Units.Metric)
                         {
@@ -122,16 +117,20 @@ namespace WeatherKit.Services
             return null;
         }
 
-        private DateTime ConvertUnixTimestampToDate(long timeStamp)
+        // Converts unix timestamp & timezone to current location's time
+        private DateTime ConvertUnixTimestampToDate(long timeStamp, int timezone)
         {
+            // Add offset with timestamp to get location's current time 
+            timeStamp += timezone;  
             // DateTime object for UTC 
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             // Add the timestamp 
             dateTime = dateTime.AddSeconds(timeStamp);
 
-            // Get Local timezone name 
-            string timeZoneName = TimeZoneInfo.Local.IsDaylightSavingTime(dateTime) ?
-                        TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName;
+            /**
+            // Get Local timezone name  "timezone":-18000,
+            string timeZoneName = TimeZoneInfo.Utc.IsDaylightSavingTime(dateTime) ?
+                        TimeZoneInfo.Utc.DaylightName : TimeZoneInfo.Utc.StandardName;
             
             // Set timeZone
             timeZone = timeZoneName;
@@ -140,8 +139,8 @@ namespace WeatherKit.Services
             tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
             // Convvert UTC to TimeZone
             DateTime converted = TimeZoneInfo.ConvertTimeFromUtc(dateTime, tst);
-
-            return converted;
+*/
+            return dateTime;
         }
     }
 }

@@ -9,9 +9,5 @@ namespace WeatherKit.Services
         public Task<Forecast> GetWeatherForecasts(LocationInput locationInput);
         public string GetJSONContent();
         public string GetURL();
-        public string GetTimeZone();
-        public TimeZoneInfo GetTimeZoneInfo();
-
-
     }
 }

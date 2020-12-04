@@ -2,12 +2,23 @@
 
 @{ ViewData["Title"] = "Home Page"; }
 
-<div class="text-center">
+<div>
     <h1 class="display-4">Welcome to Weatherkit</h1>
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
-        <input type="text" name="cityState" placeholder="City, State"><br />
+        <span>
+            <input type="text" name="cityState" placeholder="City, StateCode, CountryCode">
+            <label style="font-size:smaller">[city name], [city,state,country], [5+ digit zipcode]</label>
+        </span>
+        <br />
         <p> or </p>
-        <input type="text" name="zipCode" placeholder="Zip Code"><br />
+        <span>
+            <input type="text" name="zipCode" placeholder="Zip Code">
+            <label style="font-size:smaller">(*5 digits only)</label>
+        </span>
+        <br />
+        <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>   <br />
+
         <input id="submit" type="submit" value="Submit" />
+
     </form>
 </div>
