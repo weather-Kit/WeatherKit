@@ -117,8 +117,10 @@ namespace WeatherKit.Services
             return null;
         }
 
+        // Converts unix timestamp & timezone to current location's time
         private DateTime ConvertUnixTimestampToDate(long timeStamp, int timezone)
         {
+            // Add offset with timestamp to get location's current time 
             timeStamp += timezone;  
             // DateTime object for UTC 
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -127,8 +129,8 @@ namespace WeatherKit.Services
 
             /**
             // Get Local timezone name  "timezone":-18000,
-            string timeZoneName = TimeZoneInfo.Local.IsDaylightSavingTime(dateTime) ?
-                        TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName;
+            string timeZoneName = TimeZoneInfo.Utc.IsDaylightSavingTime(dateTime) ?
+                        TimeZoneInfo.Utc.DaylightName : TimeZoneInfo.Utc.StandardName;
             
             // Set timeZone
             timeZone = timeZoneName;

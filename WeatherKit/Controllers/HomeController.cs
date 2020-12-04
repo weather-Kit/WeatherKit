@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WeatherKit.Models;
@@ -14,18 +15,36 @@ namespace WeatherKit.Controllers
         private readonly ISettingService _settingService;
         private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(ILogger<HomeController> logger, 
-            ISettingService settingService, IWeatherAPIService weatherAPIService, ILocationService locationService)
+            ISettingService settingService, IWeatherAPIService weatherAPIService, 
+            ILocationService locationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _settingService = settingService;
             _locationService = locationService;
             _weatherAPIService = weatherAPIService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (_locationService.CookieHasData())
+            {
+                var weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
+                if (weatherForecast != null)
+                {
+                    string time = _settingService.GetSetting().Is24HourTimeFormat ?
+                        weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+
+                    ViewBag.URL = _weatherAPIService.GetURL();
+                    ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                    ViewBag.Time = time;
+
+                    return View("GetWeatherDetails", weatherForecast);
+                }
+            }
             return View();
         }
 
@@ -42,26 +61,6 @@ namespace WeatherKit.Controllers
             li.City = cityState;
             li.ZipCode = zipCode;
 
-            /*
-            li = IsInputValid(cityState, zipCode);
-            if (li == null)
-            {
-                ViewBag.InvalidMsg = "Invalid input.";
-                return View("Index");
-            }*/
-
-            //******** Test with city name, statecode, country code - WORKING
-            //li.City = cityState;
-            //li.StateCode = "WA";
-            //li.CountryCode = "US";  OR
-            //li.City = cityState;    // "Seattle, WA, US";
-
-            //******** Test with latitude & longitude - WORKING
-            // -122.33 ', Lat: ' 47.6 - Seattle
-            //  Long: -81.38 ', Lat: ' 28.54  - Orlando
-            //li.Longitude = -81.38;  // -122.33;
-            //li.Latitude = 28.54;    // 47.6;
-
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
             if (weatherForecast == null)
             {
@@ -69,11 +68,15 @@ namespace WeatherKit.Controllers
                 return View("Index");
             }
 
-            string time = _settingService.GetSetting().Is24HourTimeFormat ? weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+            string time = _settingService.GetSetting().Is24HourTimeFormat ? 
+                weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
             ViewBag.URL = _weatherAPIService.GetURL();
             ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
             ViewBag.Time = time;
+
+            // Save the location globally & to cookie
+            _locationService.UpdateLocation(li);
 
             return View("GetWeatherDetails", weatherForecast);
         }

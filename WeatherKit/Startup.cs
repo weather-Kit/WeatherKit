@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,8 @@ namespace WeatherKit
                 client.BaseAddress = new Uri("http://api.openweathermap.org/data/2.5/weather");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+            // Add HttpContext accessibility
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add services as DependencyInjection
             services.AddSingleton<ISettingService, SettingService>();

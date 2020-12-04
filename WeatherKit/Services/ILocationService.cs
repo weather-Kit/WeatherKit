@@ -10,5 +10,6 @@ namespace WeatherKit.Services
 
         public void ReadLocation(HttpContext context);
         public void WriteLocation(HttpContext context);
+        public bool CookieHasData();
     }
 }
