@@ -34,23 +34,8 @@ namespace WeatherKit.Controllers
 
         public IActionResult SaveSettings(string unitOption, string timeFormatOption)
         {
-
             // Update setting model
             UpdateToSettingModel(unitOption, timeFormatOption);
-
-                /**_settingService.GetSetting();
-            if (unitOption == "Standard Kelvin")
-            {
-                settings.Units = Units.Standard;
-            }
-            else if (unitOption == "Metric Celsius")
-            {
-                settings.Units = Units.Metric;
-            }
-            else
-            {
-                settings.Units = Units.Imperial;
-            }*/
 
             if (referer.AbsolutePath == "/")
             {
@@ -90,11 +75,11 @@ namespace WeatherKit.Controllers
         {
             Setting settings = _settingService.GetSetting();
             // Set Units
-            if (unitOption == "Standard Kelvin")
+            if (unitOption == so.UnitOptions[0])    // "Standard C & F"
             {
                 settings.Units = Units.Standard;
             }
-            else if (unitOption == "Metric Celsius")
+            else if (unitOption == so.UnitOptions[1])   // "Metric Celsius"
             {
                 settings.Units = Units.Metric;
             }
