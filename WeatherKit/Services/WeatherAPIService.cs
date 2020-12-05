@@ -69,11 +69,8 @@ namespace WeatherKit.Services
             {
                 Setting setting = _settingService.GetSetting();
 
-                if (setting.Units != Units.Standard)
-                {
-                    string unitType = setting.Units == Units.Imperial ? "imperial" : "metric";
-                    builder.Query += $"&units={unitType}";
-                }
+                string unitType = setting.Units == Units.Metric ? "metric" : "imperial";
+                builder.Query += $"&units={unitType}";
 
                 builder.Query += "&appid=1e94cd79afa39de4db034e687033b2de";
 
@@ -96,17 +93,24 @@ namespace WeatherKit.Services
                         forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise, forecast.timezone);
                         forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset, forecast.timezone);
 
-                        if (setting.Units == Units.Standard || setting.Units == Units.Metric)
+                        if (setting.Units == Units.Metric)
                         {
                             forecast.wind.GustUnit = meterBySecUnit;
                             forecast.wind.SpeedUnit = meterBySecUnit;
                             forecast.main.TempUnit = "C";
                         }
-                        else if (setting.Units == Units.Imperial)
+                        else if (setting.Units == Units.Imperial || setting.Units == Units.Standard)
                         {
                             forecast.wind.GustUnit = milesByhourUnit;
                             forecast.wind.SpeedUnit = milesByhourUnit;
                             forecast.main.TempUnit = "F";
+
+                            if (setting.Units == Units.Standard)
+                            {
+                                // Get Temp in Celsius
+                                forecast.main.TempInCelsius = ConvertTempFarehToCelsius(forecast.main.temp);
+                                forecast.main.TempFeelsLikeInCelsius = ConvertTempFarehToCelsius(forecast.main.feels_like);
+                            }
                         }
                     }
 
@@ -142,5 +146,16 @@ namespace WeatherKit.Services
 */
             return dateTime;
         }
+
+        // Converts temperature from farenheit to celsius
+        // T(°C) = (T(°F) - 32) / 1.8 OR    - We use this formula
+        // T(°C) = (T(°F) - 32) × 5/9 OR 
+        // T(°C) = (T(°F) - 32) / (9/5)
+        private double ConvertTempFarehToCelsius(double farenTemp)
+        {
+            double converted = (farenTemp - 32) / 1.8;
+            return Math.Truncate(converted * 100) / 100;
+        }
+
     }
 }

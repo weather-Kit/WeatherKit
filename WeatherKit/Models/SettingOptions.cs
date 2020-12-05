@@ -13,7 +13,7 @@ namespace WeatherKit.Models
 
         [BindProperty]
         public string UnitOption { get; set; }
-        public string[] UnitOptions = new[] { "Standard Kelvin", "Metric Celsius", "Imperial Fahrenheit"};
+        public string[] UnitOptions = new[] { "Standard C & F", "Metric Celsius", "Imperial Fahrenheit"};
 
         [BindProperty]
         public string TimeFormatOption { get; set; }

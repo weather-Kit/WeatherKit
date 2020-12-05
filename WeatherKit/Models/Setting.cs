@@ -6,13 +6,10 @@
 
         public LocationInput PreferredLocation { get; set; }
 
-        public Units Units { get; set; } = Units.Imperial;
-
-        //public WindDirection WindDirection { get; set; }
+        public Units Units { get; set; } = Units.Standard;
 
         public Setting()
         {
-            Units = Units; //???
         }
     }
 
@@ -20,14 +17,6 @@
     {
         Imperial,   // F
         Metric,     // C
-        Standard      // Kelvin
+        Standard      // C & F
     };
-
-    /*
-    public enum WindDirection
-    {
-        Cardinal,   // N, S, E, W
-        Degrees     // 0 - 360
-    }
-    */
 }
