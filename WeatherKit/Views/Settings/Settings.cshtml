@@ -20,14 +20,14 @@
             {
                 if (unitOption.Equals(Model.UnitOption))
                 {
-                    <label class="btn btn-secondary active">
-                        <input type="radio" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
+                    <label class="btn btn-secondary active" style="margin-right: 5px;">
+                        <input type="radio" style="margin-left: 15px;" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
                     </label>
                 }
                 else
                 {
-                    <label class="btn btn-secondary">
-                        <input type="radio" autocomplete="off" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
+                    <label class="btn btn-secondary" style="margin-right: 5px;">
+                        <input type="radio" style="margin-left: 15px;" autocomplete="off" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
                     </label>
                 }
             }
@@ -41,7 +41,7 @@
             {
                 if (timeFormatOption.Equals(Model.TimeFormatOption))
                 {
-                    <label class="btn btn-secondary active">
+                    <label class="btn btn-secondary active"  style="margin-left: 5px; margin-right: 5px;">
                         <input type="radio" autocomplete="off" asp-for="TimeFormatOption" value="@timeFormatOption" />@timeFormatOption<br />
                     </label>
                 }

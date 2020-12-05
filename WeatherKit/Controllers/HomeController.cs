@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WeatherKit.Models;
@@ -13,18 +15,36 @@ namespace WeatherKit.Controllers
         private readonly ISettingService _settingService;
         private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(ILogger<HomeController> logger, 
-            ISettingService settingService, IWeatherAPIService weatherAPIService, ILocationService locationService)
+            ISettingService settingService, IWeatherAPIService weatherAPIService, 
+            ILocationService locationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _settingService = settingService;
             _locationService = locationService;
             _weatherAPIService = weatherAPIService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (_locationService.CookieHasData())
+            {
+                var weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
+                if (weatherForecast != null)
+                {
+                    string time = _settingService.GetSetting().Is24HourTimeFormat ?
+                        weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+
+                    ViewBag.URL = _weatherAPIService.GetURL();
+                    ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                    ViewBag.Time = time;
+
+                    return View("GetWeatherDetails", weatherForecast);
+                }
+            }
             return View();
         }
 
@@ -53,24 +73,15 @@ namespace WeatherKit.Controllers
                 return View("Index");
             }
 
+            string time = _settingService.GetSetting().Is24HourTimeFormat ? 
+                weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+
             ViewBag.URL = _weatherAPIService.GetURL();
             ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
-            ViewBag.TimeZoneName = _weatherAPIService.GetTimeZone();
-            //ViewBag.TimeZoneInfo = _weatherAPIService.GetTimeZoneInfo().DisplayName;
-
-            string time = "";
-            if (_settingService.GetSetting().Is24HourTimeFormat)
-            {
-                // set time format for 24 hr format
-                time = weatherForecast.Date.ToString("HH:mm");
-            }
-            else
-            {
-                // set time for 12 hr format
-                time = weatherForecast.Date.ToString("hh:mm tt");
-            }
             ViewBag.Time = time;
 
+            // Save the location globally & to cookie
+            _locationService.UpdateLocation(li);
 
             return View("GetWeatherDetails", weatherForecast);
         }
@@ -79,6 +90,51 @@ namespace WeatherKit.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private LocationInput IsInputValid(string cityState, string zipCode)
+        {
+            LocationInput li = null;
+
+            if (!string.IsNullOrEmpty(zipCode))
+            {
+                li = new LocationInput();
+                li.ZipCode = zipCode.Trim();
+            }
+
+            if (!string.IsNullOrEmpty(cityState))
+            {
+                if (li == null)
+                    li = new LocationInput();
+
+                string[] items;
+                if (cityState.Contains(','))
+                {
+                    items = cityState.Split(',');
+                    List<string> list = new List<string>();
+                    foreach(string i in items)
+                    {
+                        string str = i.Trim();
+                        if (!string.IsNullOrEmpty(str))
+                            list.Add(str);
+                    }
+
+                    if (list.Count == 0)
+                        return li;
+
+                    li.City = list[0];
+                    if (list.Count > 1)
+                        li.StateCode = list[1];
+                    if (list.Count > 2)
+                        li.CountryCode = list[2];
+                }
+                else
+                {
+                    li.City = cityState;
+                }
+            }
+
+            return li;
         }
     }
 }

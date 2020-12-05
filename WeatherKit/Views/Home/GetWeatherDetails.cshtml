@@ -2,11 +2,19 @@
 
 @{
     ViewData["Title"] = "GetWeatherDetails";
-    
+
 }
 
 <h1>GetWeatherDetails</h1>
+<div>
+    <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
+        <label>Search: </label>
+        <input type="text" name="cityState" placeholder="Enter city or zipcode" width="50">
+        <input id="submit" type="submit" value="Submit" />
+    </form>
+</div>
 
+<hr />
 <div>
     <h4>Forecast</h4>
     <hr />
@@ -14,23 +22,63 @@
     Result: @ViewBag.JSONContent  <br />
     <hr />
 
-    @{ 
+    @{
         string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+        @ViewBag.Time
     }
     <img src="@img" />
 
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.sys.SunRise)
+            @Html.DisplayNameFor(model => model.Date)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.sys.SunRise)
+            @Html.DisplayFor(model => model.Date)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.sys.SunSet)
+            Location
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.sys.SunSet)
+            @Html.DisplayFor(model => model.name) , @Model.sys.country
+        </dd>
+        <dt class="col-sm-2">
+            Sun
+        </dt>
+        <dd class="col-sm-10">
+            Rise: @Model.sys.SunRise , Set:  @Model.sys.SunSet
+        </dd>
+        <dt class="col-sm-2">
+            Overall
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                string weather = Model.weather[0].main + ", " + Model.weather[0].description;
+                @weather
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Temperature
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                string temp = "";
+                if (Model.main.TempInCelsius.HasValue)
+                {
+                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                }
+                else
+                {
+                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
+                }
+            }
+            Temp: @temp <br />
+            Pressure: @Model.main.pressure , Humidity: @Model.main.humidity %
+        </dd>
+        <dt class="col-sm-2">
+            Wind
+        </dt>
+        <dd class="col-sm-10">
+            Speed: @Model.wind.speed , Degrees: @Model.wind.deg
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.visibility)
@@ -39,49 +87,22 @@
             @Html.DisplayFor(model => model.visibility)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.weather[0].main)
+            History Temp
         </dt>
         <dd class="col-sm-10">
-            @{ 
-                string weather = Model.weather[0].main + ", " + Model.weather[0].description;
-                @weather
-            }
-            
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.timezone)
-        </dt>
-        <dd class="col-sm-10">
-            @ViewBag.TimeZoneName <br /> @ViewBag.TimeZoneInfo
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.main.TempUnit)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.main.TempUnit)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.name) , @Model.sys.country
+            Min: @Model.main.temp_min @Model.main.TempUnit , Degrees: @Model.main.temp_max @Model.main.TempUnit
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.coord)
         </dt>
         <dd class="col-sm-10">
-           // @Html.DisplayFor(model => model.coord.lon)
             Long: @Model.coord.lon ',  Lat: ' @Model.coord.lat
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
     </dl>
+
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!--
+  <div>
+     <a asp-action="Index">Back to List</a>
+ </div>
+    -->
