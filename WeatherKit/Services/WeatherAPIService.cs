@@ -97,9 +97,9 @@ namespace WeatherKit.Services
 
                     if (forecast != null)
                     {
-                        forecast.Date = ConvertUnixTimestampToDate(forecast.dt);
-                        forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise);
-                        forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset);
+                        forecast.Date = ConvertUnixTimestampToDate(forecast.dt+forecast.timezone);
+                        forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise+forecast.timezone);
+                        forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset+forecast.timezone);
 
                         if (setting.Units == Units.Standard || setting.Units == Units.Metric)
                         {
@@ -129,19 +129,19 @@ namespace WeatherKit.Services
             // Add the timestamp 
             dateTime = dateTime.AddSeconds(timeStamp);
 
-            // Get Local timezone name 
-            string timeZoneName = TimeZoneInfo.Local.IsDaylightSavingTime(dateTime) ?
-                        TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName;
+            //// Get Local timezone name 
+            //string timeZoneName = TimeZoneInfo.Local.IsDaylightSavingTime(dateTime) ?
+            //            TimeZoneInfo.Local.DaylightName : TimeZoneInfo.Local.StandardName;
             
-            // Set timeZone
-            timeZone = timeZoneName;
+            //// Set timeZone
+            //timeZone = timeZoneName;
 
-            // Find TimeZoneInfo
-            tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
-            // Convvert UTC to TimeZone
-            DateTime converted = TimeZoneInfo.ConvertTimeFromUtc(dateTime, tst);
+            //// Find TimeZoneInfo
+            //tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
+            //// Convvert UTC to TimeZone
+            //DateTime converted = TimeZoneInfo.ConvertTimeFromUtc(dateTime, tst);
 
-            return converted;
+            return dateTime;
         }
     }
 }

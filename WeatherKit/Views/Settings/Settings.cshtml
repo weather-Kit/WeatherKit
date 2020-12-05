@@ -18,7 +18,7 @@
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             @foreach (var unitOption in Model.UnitOptions)
             {
-                if (unitOption.Equals("Imperial Fahrenheit"))
+                if (unitOption.Equals(Model.UnitOption))
                 {
                     <label class="btn btn-secondary active">
                         <input type="radio" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
@@ -39,7 +39,7 @@
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             @foreach (var timeFormatOption in Model.TimeFormatOptions)
             {
-                if (timeFormatOption.Equals("12 Hour"))
+                if (timeFormatOption.Equals(Model.TimeFormatOption))
                 {
                     <label class="btn btn-secondary active">
                         <input type="radio" autocomplete="off" asp-for="TimeFormatOption" value="@timeFormatOption" />@timeFormatOption<br />

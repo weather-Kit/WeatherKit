@@ -45,7 +45,7 @@ namespace WeatherKit.Controllers
             {
                 settings.Units = Units.Imperial;
             }
-
+            //CHANGE THIS TO CALL CONTROLLER ACTIONS
             if (referer.AbsolutePath == "/")
             {
                 return View("Index");

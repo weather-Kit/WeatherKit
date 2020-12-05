@@ -33,6 +33,11 @@ namespace WeatherKit.Controllers
             return View();
         }
 
+        public IActionResult SplashPage()
+        {
+            return View("SplashPage");
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetWeatherDetails(string cityState, string zipCode)
         {
@@ -51,7 +56,21 @@ namespace WeatherKit.Controllers
             ViewBag.URL = _weatherAPIService.GetURL();
             ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
             ViewBag.TimeZoneName = _weatherAPIService.GetTimeZone();
-            ViewBag.TimeZoneInfo = _weatherAPIService.GetTimeZoneInfo().DisplayName;
+            //ViewBag.TimeZoneInfo = _weatherAPIService.GetTimeZoneInfo().DisplayName;
+
+            string time = "";
+            if (_settingService.GetSetting().Is24HourTimeFormat)
+            {
+                // set time format for 24 hr format
+                time = weatherForecast.Date.ToString("HH:mm");
+            }
+            else
+            {
+                // set time for 12 hr format
+                time = weatherForecast.Date.ToString("hh:mm tt");
+            }
+            ViewBag.Time = time;
+
 
             return View("GetWeatherDetails", weatherForecast);
         }

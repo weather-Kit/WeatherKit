@@ -37,7 +37,6 @@ namespace WeatherKit.Services
 
         public void WriteLocation(HttpContext context)
         {
-            
             context.Response.Cookies.Append("City", currentLocation.City);
             context.Response.Cookies.Append("StateCode", currentLocation.StateCode);
             context.Response.Cookies.Append("ZipCode", currentLocation.ZipCode);

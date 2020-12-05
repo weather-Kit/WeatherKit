@@ -30,8 +30,11 @@ namespace WeatherKit.Services
 
         public void ReadSetting(HttpContext context)
         {
-            currentSetting.Is24HourTimeFormat = bool.Parse(context.Request.Cookies["Is24HourTimeFormat"]);
-            currentSetting.Units = (Units)int.Parse(context.Request.Cookies["Units"]);
+            if (context.Request.Cookies.ContainsKey("Is24HourTimeFormat") && context.Request.Cookies.ContainsKey("Units"))
+            {
+                currentSetting.Is24HourTimeFormat = bool.Parse(context.Request.Cookies["Is24HourTimeFormat"]);
+                currentSetting.Units = (Units)int.Parse(context.Request.Cookies["Units"]);
+            }
         }
 
         public void WriteSetting(HttpContext context)
