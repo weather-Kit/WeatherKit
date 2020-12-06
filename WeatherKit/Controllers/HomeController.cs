@@ -84,23 +84,24 @@ namespace WeatherKit.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWeatherDetails(string citySelected, string zipCode)
         {
-            string[] cityInfoArray = citySelected.Split(',');
 
-            if (!string.IsNullOrEmpty(citySelected) && cityInfoArray.Count() > 0)
+            if (!string.IsNullOrEmpty(citySelected))
             {
+                string[] cityInfoArray = citySelected.Split(',');
                 li.City = cityInfoArray[0];
-            }
 
-            if (cityInfoArray.Count() == 3)
-            {
-                li.StateCode = cityInfoArray[1];
-                li.CountryCode = cityInfoArray[2];
+                if (cityInfoArray.Count() == 3)
+                {
+                    li.StateCode = cityInfoArray[1];
+                    li.CountryCode = cityInfoArray[2];
+                }
             }
 
             if (!string.IsNullOrEmpty(zipCode))
             {
                 li.ZipCode = zipCode;
             }
+
             //******** Test with city name, zipcode - WORKING
             //li.City = cityState;
             //li.ZipCode = zipCode;
