@@ -41,6 +41,8 @@ namespace WeatherKit
             services.AddSingleton<ISettingService, SettingService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IWeatherAPIService, WeatherAPIService>();
+            services.AddMvc().AddControllersAsServices();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

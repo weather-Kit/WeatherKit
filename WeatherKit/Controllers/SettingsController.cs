@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using WeatherKit.Models;
 using WeatherKit.Services;
@@ -11,14 +13,16 @@ namespace WeatherKit.Controllers
         private readonly IWeatherAPIService _weatherAPIService;
         private readonly ISettingService _settingService;
         private readonly ILocationService _locationService;
+        private readonly HomeController _homeController;
         static private Uri referer;
 
         public SettingsController(IWeatherAPIService weatherAPIService, 
-            ISettingService settingService, ILocationService locationService)
+            ISettingService settingService, ILocationService locationService, HomeController homeController)
         {
             _weatherAPIService = weatherAPIService;
             _settingService = settingService;
             _locationService = locationService;
+            _homeController = homeController;
 
             // Update settingOption with GetSettings()
             UpdateSettingOptionsWithSetting();
@@ -37,10 +41,9 @@ namespace WeatherKit.Controllers
             // Update setting model
             UpdateToSettingModel(unitOption, timeFormatOption);
 
-            //CHANGE THIS TO CALL CONTROLLER ACTION
             if (referer.AbsolutePath == "/")
             {
-                return View("Index");
+                return (IActionResult)_homeController.Index();
             }
             else
             {
@@ -48,8 +51,7 @@ namespace WeatherKit.Controllers
                 _locationService.ReadLocation(HttpContext);
 
                 // Make API call to get updated forecast 
-                Forecast newForecast = _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation()).Result;
-                return View("/GetWeatherDetails", newForecast);
+                return _homeController.GetWeatherDetails(_locationService.GetLocation().City,_locationService.GetLocation().ZipCode).Result;
             }
         }
 
