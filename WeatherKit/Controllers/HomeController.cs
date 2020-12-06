@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using WeatherKit.Models;
 using WeatherKit.Services;
 
@@ -16,6 +19,9 @@ namespace WeatherKit.Controllers
         private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private LocationInput li = new LocationInput();
+        private List<CityOptions> cityOptionsList = new List<CityOptions>();
+        private List<CityInfo> cityInfoList = null;
 
         public HomeController(ILogger<HomeController> logger, 
             ISettingService settingService, IWeatherAPIService weatherAPIService, 
@@ -54,12 +60,47 @@ namespace WeatherKit.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWeatherDetails(string cityState, string zipCode)
+        public JsonResult CityList()
         {
-            LocationInput li = new LocationInput();
-            //******** Test with city name, zipcode - WORKING
-            li.City = cityState;
-            li.ZipCode = zipCode;
+
+            using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
+            {
+                string json = r.ReadToEnd();
+                cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);
+            }
+
+            foreach (var city in cityInfoList)
+            {
+                CityOptions co = new CityOptions();
+                co.name = city.name;
+                co.state = city.state;
+                co.country = city.country;
+                cityOptionsList.Add(co);
+            }
+
+            return Json(cityOptionsList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetWeatherDetails(string citySelected, string zipCode)
+        {
+
+            if (!string.IsNullOrEmpty(citySelected))
+            {
+                string[] cityInfoArray = citySelected.Split(',');
+                li.City = cityInfoArray[0];
+
+                if (cityInfoArray.Count() == 3)
+                {
+                    li.StateCode = cityInfoArray[1];
+                    li.CountryCode = cityInfoArray[2];
+                }
+            }
+
+            if (!string.IsNullOrEmpty(zipCode))
+            {
+                li.ZipCode = zipCode;
+            }
 
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
             if (weatherForecast == null)
