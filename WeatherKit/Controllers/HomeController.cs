@@ -102,10 +102,6 @@ namespace WeatherKit.Controllers
                 li.ZipCode = zipCode;
             }
 
-            //******** Test with city name, zipcode - WORKING
-            //li.City = cityState;
-            //li.ZipCode = zipCode;
-
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
             if (weatherForecast == null)
             {
