@@ -112,12 +112,13 @@ namespace WeatherKit.Controllers
             string time = _settingService.GetSetting().Is24HourTimeFormat ? 
                 weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
-            ViewBag.URL = _weatherAPIService.GetURL();
-            ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+            //ViewBag.URL = _weatherAPIService.GetURL();
+            //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+            ViewBag.APIUrl = "http://openweathermap.org/img/wn/";
             ViewBag.Time = time;
 
             // Save the location globally & to cookie
-            _locationService.UpdateLocation(li);
+            //_locationService.UpdateLocation(li);
 
             return View("GetWeatherDetails", weatherForecast);
         }

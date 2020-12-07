@@ -16,14 +16,16 @@
 
 <hr />
 <div>
-    <h4>Forecast</h4>
-    <hr />
-    URL : @ViewBag.URL   <br />
-    Result: @ViewBag.JSONContent  <br />
-    <hr />
+    <h4>@Html.DisplayFor(model => model.name), @Model.sys.country </h4>
+    @*
+        <hr />
+        URL : @ViewBag.URL   <br />
+        Result: @ViewBag.JSONContent  <br />
+        <hr />
+    *@
 
     @{
-        string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+        string img = ViewBag.APIUrl + Model.weather[0].icon + "@2x.png";
         @ViewBag.Time
     }
     <img src="@img" />
