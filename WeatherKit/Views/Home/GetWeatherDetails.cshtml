@@ -7,30 +7,45 @@
 @model WeatherKit.Models.Forecast
 
 <div>
-    <H1 class="display-4">@Model.name </H1>
-
-    <p>The Weather is: @Model.weather[0].description </p><
-
-   
-        @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
-        }
-        <img src="@img" />
-        
-
-            <p>The temperature is: @Model.main.temp degrees</p>
-
-            <p>But it Feels like: @Model.main.feels_like degrees</p>
-
-            <p>The Humidity is:  @Model.main.humidity% </p>
-
-            <p>The Wind speed is: @Model.wind.speed mph</p>
-
-            @ViewBag.Time
+    <H1 class="display-4 text-center">@Model.name </H1>
+    <div class="jumbotron bg-light mx-auto" style="width:600px">
+        <div class="row">
+            <div class="col">
+                <h6>The Weather is: <small>@Model.weather[0].description</small> </h6>
 
 
+                @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
+                }
+                <img src="@img" />
+            </div>
 
+            <div class="col">
+                <h6>The temperature is: <small>@Model.main.temp degrees</small></h6>
 
+                <h6>But it Feels like: <small>@Model.main.feels_like degrees</small></h6>
+            </div>
+            <div class="col">
+                <h6>The Humidity is:  <small>@Model.main.humidity%</small> </h6>
 
-            @Model.sys.country
+                <h6>The Wind speed is: <small>@Model.wind.speed mph</small></h6>
+
+                <h6>At the time of: <small>@ViewBag.Time</small></h6>
+
+                <h6>Country: <small>@Model.sys.country</small></h6>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron bg-light align-items-center text-center mx-auto" style="width:359px">
+
+        <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" id="box">
+            <input type="text" name="cityState" placeholder="City" class="container bg-white" style="height:50px">
+            <p style="font-size:18px" class="text"> or </p>
+            <input type="text" name="zipCode" placeholder="Zip Code" class="container bg-white" style="height:50px"><br />
+            <p></p>
+            <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>   <br />
+            <input class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
+        </form>
+
+    </div>
 </div>
 
