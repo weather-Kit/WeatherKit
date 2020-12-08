@@ -9,17 +9,18 @@
         <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
             <label>Search: </label>
             <input type="text" name="citySelected" placeholder="Enter city or zipcode" width="50">
-            <input id="submit" type="submit" value="Submit" />
+            <input  class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
         </form>
     </div>
 
 
     <div>
-        <H1 class="display-4 text-center">@Model.name </H1>
+        <H1 class="display-4 text-center">@Model.name, @Model.sys.country </H1>
         <div class="jumbotron bg-light mx-auto" style="width:600px">
             <div class="row">
                 <div class="col">
                     <h6> Weather: <small>@Model.weather[0].description</small> </h6>
+                    <h6>Time: <small> @ViewBag.Time</small></h6>
 
 
                     @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
@@ -28,31 +29,63 @@
                 </div>
 
                 <div class="col">
+                    <h6>Date: <small>@Model.Date</small></h6>
+
                     @{ string temp = "";
                         if (Model.main.TempInCelsius.HasValue)
                         {
-                            temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                            temp = $"{@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) ";
                         }
                         else
                         {
-                            temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
+                            temp = $"{@Model.main.temp} {Model.main.TempUnit} ";
+
                         }
+
                     }
-                    Temp: @temp <br />
+                    @{ string feels = "";
+                        
+                        if (Model.main.TempInCelsius.HasValue)
+                        {
+                            feels = $"{Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                        }
+                        else
+                        {
+                            feels = $"{Model.main.feels_like} {Model.main.TempUnit}";
+
+                        }}
+                    <h6>Temp:<small> @temp </small></h6> 
+
+                    <h6>Feels Like: <small> @feels</small></h6>
+                    <br/>
+
+                    <h6>
+                       History Temp:<br/>
+                        Min: <small>@Model.main.temp_min @Model.main.TempUnit</small> ,<br/> 
+                        Degrees:<small> @Model.main.temp_max @Model.main.TempUnit,</small>
+                    </h6>
+
 
                 </div>
                 <div class="col">
+                    <h6>Pressure: <small>@Model.main.pressure</small></h6>
+
                     <h6>Humidity:  <small>@Model.main.humidity%</small> </h6>
 
-                    <h6>Wind speed: <small>@Model.wind.speed mph</small></h6>
+                    <h6>Wind speed: <small>@Model.wind.speed mph, </small> </h6>
+                          
+                    <h6>Degrees: <small>@Model.wind.deg</small></h6>
 
-                    <h6>
-                        Min: @Model.main.temp_min @Model.main.TempUnit , Degrees: @Model.main.temp_max @Model.main.TempUnit
-                    </h6>
+                    <h6>Visibility: <small>@Model.visibility</small></h6>
+                    
+                    <h6>Sunrise: <small>@Model.sys.SunRise</small></h6>
 
-                    <h6>Time: <small>@ViewBag.Time</small></h6>
+                    <h6>Sunset: <small>@Model.sys.SunSet</small></h6>
 
-                    <h6>Country: <small>@Model.sys.country</small></h6>
+                    <h6>Coord: <small>@Model.coord.lon Long, @Model.coord.lat Lat</small></h6>
+                    
+
+                    
                 </div>
             </div>
         </div>
