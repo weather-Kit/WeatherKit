@@ -40,21 +40,11 @@ namespace WeatherKit.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Forecast weatherForecast = null;
 
             if (_locationService.CookieHasData())
             {
-                var weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
-                if (weatherForecast != null)
-                {
-                    string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                        weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
-
-                    //ViewBag.URL = _weatherAPIService.GetURL();
-                    //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
-                    ViewBag.Time = time;
-
-                    return View("GetWeatherDetails_Debug", weatherForecast);
-                }
+                weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
@@ -63,7 +53,7 @@ namespace WeatherKit.Controllers
                     using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
                     {
                         var ipAddress = HttpContext.Connection.RemoteIpAddress;    
-                        //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
+                        ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
                         var city = reader.City(ipAddress);
 
                         LocationInput location = new LocationInput();
@@ -76,25 +66,23 @@ namespace WeatherKit.Controllers
                             _locationService.WriteLocation(HttpContext);
                             _locationService.ReadLocation(HttpContext); //sets CookieHasData to true
 
-                            Forecast forecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
-                            if (forecast != null)
-                            {
-                                string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                                    forecast.Date.ToString("HH:mm") : forecast.Date.ToString("hh:mm tt");
-
-                                forecast.TimeZone = city.Location.TimeZone;
-
-                                //ViewBag.URL = _weatherAPIService.GetURL();
-                                //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
-                                ViewBag.Time = time;
-
-                                return View("GetWeatherDetails_Debug", forecast);
-                            }
+                            weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
+                            weatherForecast.TimeZone = city.Location.TimeZone;
                         }
                     }
                 }
                 catch { }
             }
+
+            if (weatherForecast != null)
+            {
+                string time = _settingService.GetSetting().Is24HourTimeFormat ?
+                    weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+
+                ViewBag.Time = time;
+
+                return View("GetWeatherDetails_Debug", weatherForecast);
+            } 
 
             return View();
         }
@@ -151,8 +139,8 @@ namespace WeatherKit.Controllers
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
             if (weatherForecast == null)
             {
-                ViewBag.InvalidMsg = "Incorrect location or format.";
-                return View("Index");
+                ViewBag.InvalidMsg = "Incorrect location.";
+                return await Index();    
             }
 
             string time = _settingService.GetSetting().Is24HourTimeFormat ?
