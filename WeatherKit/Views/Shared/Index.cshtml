@@ -1,25 +1,29 @@
-﻿@{ ViewData["Title"] = "Home"; }
+﻿@{ ViewData["Title"] = "Home Page"; }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 
 <div>
     <h1 class="display-4">Welcome to Weatherkit</h1>
-    <br />
-    <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
+    <br/>
+    <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" class="jumbotron bg-light align-items-center text-center mx-auto" style="width:366px">
         <span>
-            <label for="city" style="margin-right: 110px;">Select City:</label><br />
+            <label for="city" style="margin-right: 110px; font-weight: 600;">Select City:</label><br />
             <input list="city" name="citySelected" type="text" placeholder="Search by city name">
         </span>
         <datalist id="city">
         </datalist>
         <br />
         <br />
-        <p> or </p>
+        <p style="font-size: medium; color: blue;"> or </p>
         <span>
-            <label for="city" style="margin-right: 80px;">Enter Zip Code:</label><br />
+            <label for="city" style="margin-right: 80px; font-weight: 600;">Enter Zip Code:</label><br />
             <input type="text" name="zipCode" placeholder="5 digits only">
         </span>
         <br />
         <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>
         <br />
-        <input id="submit" type="submit" value="Submit" />
+        <input class="bg-primary text-white btn"id="submit" type="submit" value="Submit" />
     </form>
 </div>
