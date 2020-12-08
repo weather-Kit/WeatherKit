@@ -42,13 +42,13 @@ namespace WeatherKit.Controllers
                 if (weatherForecast != null)
                 {
                     string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                        weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+                        weatherForecast.Date.ToString("MMM, dd yyyy HH:mm") : weatherForecast.Date.ToString("MMM, dd yyyy hh:mm tt");
 
-                    ViewBag.URL = _weatherAPIService.GetURL();
-                    ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                    //ViewBag.URL = _weatherAPIService.GetURL();
+                    //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
                     ViewBag.Time = time;
 
-                    return View("GetWeatherDetails", weatherForecast);
+                    return View("GetWeatherDetails_Debug", weatherForecast);
                 }
             }
             return View();
@@ -112,14 +112,12 @@ namespace WeatherKit.Controllers
             string time = _settingService.GetSetting().Is24HourTimeFormat ? 
                 weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
-            //ViewBag.URL = _weatherAPIService.GetURL();
-            //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
             ViewBag.Time = time;
 
             // Save the location globally & to cookie
-            //_locationService.UpdateLocation(li);
+            _locationService.UpdateLocation(li);
 
-            return View("GetWeatherDetails", weatherForecast);
+            return View("GetWeatherDetails_Debug", weatherForecast);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -43,12 +43,9 @@ namespace WeatherKit.Controllers
             }
             else
             {
-                // Get the location input data from cookie
-                _locationService.ReadLocation(HttpContext);
-
                 // Make API call to get updated forecast 
                 Forecast newForecast = _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation()).Result;
-                return View("/GetWeatherDetails", newForecast);
+                return View("/Home/GetWeatherDetails_Debug", newForecast);
             }
         }
 

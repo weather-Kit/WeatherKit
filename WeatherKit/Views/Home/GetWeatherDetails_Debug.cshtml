@@ -4,7 +4,7 @@
     ViewData["Title"] = "Forecast";
 }
 
-<h1>GetWeatherDetails</h1>
+<h1>Forecast</h1>
 <div>
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
         <label>Search: </label>
@@ -16,12 +16,6 @@
 <hr />
 <div>
     <h4>@Html.DisplayFor(model => model.name), @Model.sys.country </h4>
-    @*
-        <hr />
-        URL : @ViewBag.URL   <br />
-        Result: @ViewBag.JSONContent  <br />
-        <hr />
-    *@
 
     @{
         string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
