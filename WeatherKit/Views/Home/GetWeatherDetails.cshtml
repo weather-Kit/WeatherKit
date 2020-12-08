@@ -5,45 +5,57 @@
 }
 
 @model WeatherKit.Models.Forecast
+    <div>
+        <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
+            <label>Search: </label>
+            <input type="text" name="citySelected" placeholder="Enter city or zipcode" width="50">
+            <input id="submit" type="submit" value="Submit" />
+        </form>
+    </div>
 
-<div>
-    <H1 class="display-4 text-center">@Model.name </H1>
-    <div class="jumbotron bg-light mx-auto" style="width:600px">
-        <div class="row">
-            <div class="col">
-                <h6> Weather: <small>@Model.weather[0].description</small> </h6>
+
+    <div>
+        <H1 class="display-4 text-center">@Model.name </H1>
+        <div class="jumbotron bg-light mx-auto" style="width:600px">
+            <div class="row">
+                <div class="col">
+                    <h6> Weather: <small>@Model.weather[0].description</small> </h6>
 
 
-                @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
-                }
-                <img src="@img" />
-            </div>
+                    @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
+                    }
+                    <img src="@img" />
+                </div>
 
-            <div class="col">
-                @{ string temp = "";
-                                if (Model.main.TempInCelsius.HasValue)
-                                {
-                                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
-                                }
-                                else
-                                {
-                                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
-                                }
-                }
-                Temp: @temp <br />
+                <div class="col">
+                    @{ string temp = "";
+                        if (Model.main.TempInCelsius.HasValue)
+                        {
+                            temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                        }
+                        else
+                        {
+                            temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
+                        }
+                    }
+                    Temp: @temp <br />
 
-            </div>
-            <div class="col">
-                <h6>Humidity:  <small>@Model.main.humidity%</small> </h6>
+                </div>
+                <div class="col">
+                    <h6>Humidity:  <small>@Model.main.humidity%</small> </h6>
 
-                <h6>Wind speed: <small>@Model.wind.speed mph</small></h6>
+                    <h6>Wind speed: <small>@Model.wind.speed mph</small></h6>
 
-                <h6>Time: <small>@ViewBag.Time</small></h6>
+                    <h6>
+                        Min: @Model.main.temp_min @Model.main.TempUnit , Degrees: @Model.main.temp_max @Model.main.TempUnit
+                    </h6>
 
-                <h6>Country: <small>@Model.sys.country</small></h6>
+                    <h6>Time: <small>@ViewBag.Time</small></h6>
+
+                    <h6>Country: <small>@Model.sys.country</small></h6>
+                </div>
             </div>
         </div>
+
     </div>
-    
-</div>
 
