@@ -114,7 +114,6 @@ namespace WeatherKit.Controllers
 
             //ViewBag.URL = _weatherAPIService.GetURL();
             //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
-            ViewBag.APIUrl = "http://openweathermap.org/img/wn/";
             ViewBag.Time = time;
 
             // Save the location globally & to cookie

@@ -1,8 +1,7 @@
 ﻿@model WeatherKit.Models.Forecast
 
 @{
-    ViewData["Title"] = "GetWeatherDetails";
-
+    ViewData["Title"] = "Forecast";
 }
 
 <h1>GetWeatherDetails</h1>
@@ -25,7 +24,7 @@
     *@
 
     @{
-        string img = ViewBag.APIUrl + Model.weather[0].icon + "@2x.png";
+        string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
         @ViewBag.Time
     }
     <img src="@img" />
@@ -103,8 +102,3 @@
     </dl>
 
 </div>
-<!--
-  <div>
-     <a asp-action="Index">Back to List</a>
- </div>
-    -->
