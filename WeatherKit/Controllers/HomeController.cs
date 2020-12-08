@@ -49,46 +49,51 @@ namespace WeatherKit.Controllers
                     string time = _settingService.GetSetting().Is24HourTimeFormat ?
                         weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
-                    ViewBag.URL = _weatherAPIService.GetURL();
-                    ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                    //ViewBag.URL = _weatherAPIService.GetURL();
+                    //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
                     ViewBag.Time = time;
 
-                    return View("GetWeatherDetails", weatherForecast);
+                    return View("GetWeatherDetails_Debug", weatherForecast);
                 }
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
-                using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
+                try
                 {
-                    var ipAddress = HttpContext.Connection.RemoteIpAddress;
-                    var city = reader.City(ipAddress);
-
-                    LocationInput location = new LocationInput();
-                    if ((city.Location.Longitude != null) && (city.Location.Latitude != null))
+                    using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
                     {
-                        location.Longitude = (double)city.Location.Longitude;
-                        location.Latitude = (double)city.Location.Latitude;
+                        var ipAddress = HttpContext.Connection.RemoteIpAddress;    
+                        //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
+                        var city = reader.City(ipAddress);
 
-                        _locationService.UpdateLocation(location);
-                        _locationService.WriteLocation(HttpContext);
-                        _locationService.ReadLocation(HttpContext);//sets CookieHasData to true
-
-                        Forecast forecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
-                        if (forecast != null)
+                        LocationInput location = new LocationInput();
+                        if ((city.Location.Longitude != null) && (city.Location.Latitude != null))
                         {
-                            string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                                forecast.Date.ToString("HH:mm") : forecast.Date.ToString("hh:mm tt");
+                            location.Longitude = (double)city.Location.Longitude;
+                            location.Latitude = (double)city.Location.Latitude;
 
-                            forecast.TimeZone = city.Location.TimeZone;
+                            _locationService.UpdateLocation(location);
+                            _locationService.WriteLocation(HttpContext);
+                            _locationService.ReadLocation(HttpContext); //sets CookieHasData to true
 
-                            ViewBag.URL = _weatherAPIService.GetURL();
-                            ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
-                            ViewBag.Time = time;
+                            Forecast forecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
+                            if (forecast != null)
+                            {
+                                string time = _settingService.GetSetting().Is24HourTimeFormat ?
+                                    forecast.Date.ToString("HH:mm") : forecast.Date.ToString("hh:mm tt");
 
-                            return View("GetWeatherDetails", forecast);
+                                forecast.TimeZone = city.Location.TimeZone;
+
+                                //ViewBag.URL = _weatherAPIService.GetURL();
+                                //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                                ViewBag.Time = time;
+
+                                return View("GetWeatherDetails_Debug", forecast);
+                            }
                         }
                     }
                 }
+                catch { }
             }
 
             return View();
@@ -166,6 +171,7 @@ namespace WeatherKit.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
         private LocationInput IsInputValid(string cityState, string zipCode)
         {
             LocationInput li = null;

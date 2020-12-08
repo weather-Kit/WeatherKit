@@ -9,7 +9,10 @@
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
         <label>Search: </label>
         <input type="text" name="citySelected" placeholder="Enter city or zipcode" width="50">
+        <datalist id="city">
+        </datalist>
         <input id="submit" type="submit" value="Submit" />
+        <br />
     </form>
 </div>
 
