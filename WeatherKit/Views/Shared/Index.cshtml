@@ -6,7 +6,7 @@
 
 <div>
     <h1 class="display-4">Welcome to Weatherkit</h1>
-    <br/>
+    <br />
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" class="jumbotron bg-light align-items-center text-center mx-auto" style="width:366px">
         <span>
             <label for="city" style="margin-right: 110px; font-weight: 600;">Select City:</label><br />
@@ -24,6 +24,6 @@
         <br />
         <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>
         <br />
-        <input class="bg-primary text-white btn"id="submit" type="submit" value="Submit" />
+        <input class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
     </form>
 </div>
