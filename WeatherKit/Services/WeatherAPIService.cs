@@ -89,6 +89,7 @@ namespace WeatherKit.Services
 
                     if (forecast != null)
                     {
+
                         forecast.Date = ConvertUnixTimestampToDate(forecast.dt, forecast.timezone);
                         forecast.sys.SunRise = ConvertUnixTimestampToDate(forecast.sys.sunrise, forecast.timezone);
                         forecast.sys.SunSet = ConvertUnixTimestampToDate(forecast.sys.sunset, forecast.timezone);

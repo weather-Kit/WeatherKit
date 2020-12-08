@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MaxMind.GeoIP2;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,38 +21,76 @@ namespace WeatherKit.Controllers
         private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private LocationInput li = new LocationInput();
         private List<CityOptions> cityOptionsList = new List<CityOptions>();
         private List<CityInfo> cityInfoList = null;
 
         public HomeController(ILogger<HomeController> logger, 
             ISettingService settingService, IWeatherAPIService weatherAPIService, 
-            ILocationService locationService, IHttpContextAccessor httpContextAccessor)
+            ILocationService locationService, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _settingService = settingService;
             _locationService = locationService;
             _weatherAPIService = weatherAPIService;
             _httpContextAccessor = httpContextAccessor;
+            _hostingEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
         {
+
             if (_locationService.CookieHasData())
             {
                 var weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
                 if (weatherForecast != null)
                 {
                     string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                        weatherForecast.Date.ToString("MMM, dd yyyy HH:mm") : weatherForecast.Date.ToString("MMM, dd yyyy hh:mm tt");
+                        weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
-                    //ViewBag.URL = _weatherAPIService.GetURL();
-                    //ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                    ViewBag.URL = _weatherAPIService.GetURL();
+                    ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
                     ViewBag.Time = time;
 
-                    return View("GetWeatherDetails_Debug", weatherForecast);
+                    return View("GetWeatherDetails", weatherForecast);
                 }
             }
+            else // If there are no cookies set, try to get user's location from their IP address
+            {
+                using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
+                {
+                    var ipAddress = HttpContext.Connection.RemoteIpAddress;
+                    var city = reader.City(ipAddress);
+
+                    LocationInput location = new LocationInput();
+                    if ((city.Location.Longitude != null) && (city.Location.Latitude != null))
+                    {
+                        location.Longitude = (double)city.Location.Longitude;
+                        location.Latitude = (double)city.Location.Latitude;
+
+                        _locationService.UpdateLocation(location);
+                        _locationService.WriteLocation(HttpContext);
+                        _locationService.ReadLocation(HttpContext);//sets CookieHasData to true
+
+                        Forecast forecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
+                        if (forecast != null)
+                        {
+                            string time = _settingService.GetSetting().Is24HourTimeFormat ?
+                                forecast.Date.ToString("HH:mm") : forecast.Date.ToString("hh:mm tt");
+
+                            forecast.TimeZone = city.Location.TimeZone;
+
+                            ViewBag.URL = _weatherAPIService.GetURL();
+                            ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
+                            ViewBag.Time = time;
+
+                            return View("GetWeatherDetails", forecast);
+                        }
+                    }
+                }
+            }
+
             return View();
         }
 
@@ -81,6 +121,7 @@ namespace WeatherKit.Controllers
             return Json(cityOptionsList);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetWeatherDetails(string citySelected, string zipCode)
         {
@@ -109,7 +150,7 @@ namespace WeatherKit.Controllers
                 return View("Index");
             }
 
-            string time = _settingService.GetSetting().Is24HourTimeFormat ? 
+            string time = _settingService.GetSetting().Is24HourTimeFormat ?
                 weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
             ViewBag.Time = time;
@@ -125,7 +166,6 @@ namespace WeatherKit.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         private LocationInput IsInputValid(string cityState, string zipCode)
         {
             LocationInput li = null;
@@ -146,7 +186,7 @@ namespace WeatherKit.Controllers
                 {
                     items = cityState.Split(',');
                     List<string> list = new List<string>();
-                    foreach(string i in items)
+                    foreach (string i in items)
                     {
                         string str = i.Trim();
                         if (!string.IsNullOrEmpty(str))

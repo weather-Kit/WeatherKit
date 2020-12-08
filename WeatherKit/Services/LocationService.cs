@@ -53,8 +53,8 @@ namespace WeatherKit.Services
 
             if (!(context.Request.Cookies["Latitude"] is null) && !(context.Request.Cookies["Longitude"] is null))
             {
-                currentLocation.Latitude = long.Parse(context.Request.Cookies["Latitude"]);
-                currentLocation.Longitude = long.Parse(context.Request.Cookies["Longitude"]);
+                currentLocation.Latitude = double.Parse(context.Request.Cookies["Latitude"]);
+                currentLocation.Longitude = double.Parse(context.Request.Cookies["Longitude"]);
                 cookieHasData = true;
             }
         }
