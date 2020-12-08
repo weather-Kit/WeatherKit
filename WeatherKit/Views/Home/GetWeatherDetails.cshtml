@@ -11,7 +11,7 @@
     <div class="jumbotron bg-light mx-auto" style="width:600px">
         <div class="row">
             <div class="col">
-                <h6>The Weather is: <small>@Model.weather[0].description</small> </h6>
+                <h6> Weather: <small>@Model.weather[0].description</small> </h6>
 
 
                 @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
@@ -20,32 +20,30 @@
             </div>
 
             <div class="col">
-                <h6>The temperature is: <small>@Model.main.temp degrees</small></h6>
+                @{ string temp = "";
+                                if (Model.main.TempInCelsius.HasValue)
+                                {
+                                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                                }
+                                else
+                                {
+                                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
+                                }
+                }
+                Temp: @temp <br />
 
-                <h6>But it Feels like: <small>@Model.main.feels_like degrees</small></h6>
             </div>
             <div class="col">
-                <h6>The Humidity is:  <small>@Model.main.humidity%</small> </h6>
+                <h6>Humidity:  <small>@Model.main.humidity%</small> </h6>
 
-                <h6>The Wind speed is: <small>@Model.wind.speed mph</small></h6>
+                <h6>Wind speed: <small>@Model.wind.speed mph</small></h6>
 
-                <h6>At the time of: <small>@ViewBag.Time</small></h6>
+                <h6>Time: <small>@ViewBag.Time</small></h6>
 
                 <h6>Country: <small>@Model.sys.country</small></h6>
             </div>
         </div>
     </div>
-    <div class="jumbotron bg-light align-items-center text-center mx-auto" style="width:359px">
-
-        <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" id="box">
-            <input type="text" name="cityState" placeholder="City" class="container bg-white" style="height:50px">
-            <p style="font-size:18px" class="text"> or </p>
-            <input type="text" name="zipCode" placeholder="Zip Code" class="container bg-white" style="height:50px"><br />
-            <p></p>
-            <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>   <br />
-            <input class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
-        </form>
-
-    </div>
+    
 </div>
 
