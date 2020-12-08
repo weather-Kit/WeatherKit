@@ -1,11 +1,10 @@
 ﻿@model WeatherKit.Models.Forecast
 
 @{
-    ViewData["Title"] = "GetWeatherDetails";
-
+    ViewData["Title"] = "Forecast";
 }
 
-<h1>GetWeatherDetails</h1>
+<h1>Forecast</h1>
 <div>
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
         <label>Search: </label>
@@ -16,11 +15,7 @@
 
 <hr />
 <div>
-    <h4>Forecast</h4>
-    <hr />
-    URL : @ViewBag.URL   <br />
-    Result: @ViewBag.JSONContent  <br />
-    <hr />
+    <h4>@Html.DisplayFor(model => model.name), @Model.sys.country </h4>
 
     @{
         string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
@@ -101,8 +96,3 @@
     </dl>
 
 </div>
-<!--
-  <div>
-     <a asp-action="Index">Back to List</a>
- </div>
-    -->
