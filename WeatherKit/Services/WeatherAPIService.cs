@@ -132,19 +132,6 @@ namespace WeatherKit.Services
             // Add the timestamp 
             dateTime = dateTime.AddSeconds(timeStamp);
 
-            /**
-            // Get Local timezone name  "timezone":-18000,
-            string timeZoneName = TimeZoneInfo.Utc.IsDaylightSavingTime(dateTime) ?
-                        TimeZoneInfo.Utc.DaylightName : TimeZoneInfo.Utc.StandardName;
-            
-            //// Set timeZone
-            //timeZone = timeZoneName;
-
-            // Find TimeZoneInfo
-            tst = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
-            // Convvert UTC to TimeZone
-            DateTime converted = TimeZoneInfo.ConvertTimeFromUtc(dateTime, tst);
-*/
             return dateTime;
         }
 

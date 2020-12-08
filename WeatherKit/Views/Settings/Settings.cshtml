@@ -1,12 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model WeatherKit.Models.SettingOptions
+﻿@model WeatherKit.Models.SettingOptions
 @{ ViewData["Title"] = "Settings"; }
 
 
 <link rel="stylesheet;nofollow" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link href="~\css\style.css" rel="stylesheet" />
+
 <div class="text-center">
     <h1 class="display-4">Weatherkit Settings</h1>
 </div>
@@ -20,13 +17,13 @@
             {
                 if (unitOption.Equals(Model.UnitOption))
                 {
-                    <label class="btn btn-secondary active" style="margin-right: 5px;">
+                    <label class="btn btn-secondary active" style="margin-right: 5px; border-radius: 4px;">
                         <input type="radio" style="margin-left: 15px;" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
                     </label>
                 }
                 else
                 {
-                    <label class="btn btn-secondary" style="margin-right: 5px;">
+                    <label class="btn btn-secondary" style="margin-right: 5px; border-radius: 4px;">
                         <input type="radio" style="margin-left: 15px;" autocomplete="off" asp-for="UnitOption" value="@unitOption" />@unitOption<br />
                     </label>
                 }
@@ -41,13 +38,13 @@
             {
                 if (timeFormatOption.Equals(Model.TimeFormatOption))
                 {
-                    <label class="btn btn-secondary active"  style="margin-left: 5px; margin-right: 5px;">
+                    <label class="btn btn-secondary active"  style="margin-left: 5px; margin-right: 5px; border-radius: 4px;">
                         <input type="radio" autocomplete="off" asp-for="TimeFormatOption" value="@timeFormatOption" />@timeFormatOption<br />
                     </label>
                 }
                 else
                 {
-                    <label class="btn btn-secondary differentShade">
+                    <label class="btn btn-secondary" style="border-radius: 4px;">
                         <input type="radio" autocomplete="off" asp-for="TimeFormatOption" value="@timeFormatOption" />@timeFormatOption<br />
                     </label>
                 }

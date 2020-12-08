@@ -1,24 +1,25 @@
-﻿@model WeatherKit.Models.LocationInput
-
-@{ ViewData["Title"] = "Home Page"; }
+﻿@{ ViewData["Title"] = "Home"; }
 
 <div>
     <h1 class="display-4">Welcome to Weatherkit</h1>
+    <br />
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
         <span>
-            <input type="text" name="cityState" placeholder="City, StateCode, CountryCode">
-            <label style="font-size:smaller">[city name], [city,state,country], [5+ digit zipcode]</label>
+            <label for="city" style="margin-right: 110px;">Select City:</label><br />
+            <input list="city" name="citySelected" type="text" placeholder="Search by city name">
         </span>
+        <datalist id="city">
+        </datalist>
+        <br />
         <br />
         <p> or </p>
         <span>
-            <input type="text" name="zipCode" placeholder="Zip Code">
-            <label style="font-size:smaller">(*5 digits only)</label>
+            <label for="city" style="margin-right: 80px;">Enter Zip Code:</label><br />
+            <input type="text" name="zipCode" placeholder="5 digits only">
         </span>
         <br />
-        <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>   <br />
-
+        <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>
+        <br />
         <input id="submit" type="submit" value="Submit" />
-
     </form>
 </div>

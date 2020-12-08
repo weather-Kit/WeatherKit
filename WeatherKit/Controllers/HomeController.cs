@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using MaxMind.GeoIP2;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using WeatherKit.Models;
 using WeatherKit.Services;
 
@@ -19,6 +22,9 @@ namespace WeatherKit.Controllers
         private readonly IWeatherAPIService _weatherAPIService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private LocationInput li = new LocationInput();
+        private List<CityOptions> cityOptionsList = new List<CityOptions>();
+        private List<CityInfo> cityInfoList = null;
 
         public HomeController(ILogger<HomeController> logger, 
             ISettingService settingService, IWeatherAPIService weatherAPIService, 
@@ -93,18 +99,49 @@ namespace WeatherKit.Controllers
             return View();
         }
 
-        public IActionResult SplashPage()
+        [HttpGet]
+        public JsonResult CityList()
         {
-            return View("SplashPage");
+
+            using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
+            {
+                string json = r.ReadToEnd();
+                cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);
+            }
+
+            foreach (var city in cityInfoList)
+            {
+                CityOptions co = new CityOptions();
+                co.name = city.name;
+                co.state = city.state;
+                co.country = city.country;
+                cityOptionsList.Add(co);
+            }
+
+            return Json(cityOptionsList);
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> GetWeatherDetails(string cityState, string zipCode)
+        public async Task<IActionResult> GetWeatherDetails(string citySelected, string zipCode)
         {
-            LocationInput li = new LocationInput();
-            //******** Test with city name, zipcode - WORKING
-            li.City = cityState;
-            li.ZipCode = zipCode;
+
+            if (!string.IsNullOrEmpty(citySelected))
+            {
+                string[] cityInfoArray = citySelected.Split(',');
+                li.City = cityInfoArray[0];
+
+                if (cityInfoArray.Count() == 3)
+                {
+                    li.StateCode = cityInfoArray[1];
+                    li.CountryCode = cityInfoArray[2];
+                }
+            }
+
+            if (!string.IsNullOrEmpty(zipCode))
+            {
+                li.ZipCode = zipCode;
+            }
 
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
             if (weatherForecast == null)
@@ -113,17 +150,15 @@ namespace WeatherKit.Controllers
                 return View("Index");
             }
 
-            string time = _settingService.GetSetting().Is24HourTimeFormat ? 
+            string time = _settingService.GetSetting().Is24HourTimeFormat ?
                 weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
 
-            ViewBag.URL = _weatherAPIService.GetURL();
-            ViewBag.JSONContent = _weatherAPIService.GetJSONContent();
             ViewBag.Time = time;
 
             // Save the location globally & to cookie
             _locationService.UpdateLocation(li);
 
-            return View("GetWeatherDetails", weatherForecast);
+            return View("GetWeatherDetails_Debug", weatherForecast);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -131,7 +166,6 @@ namespace WeatherKit.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         private LocationInput IsInputValid(string cityState, string zipCode)
         {
             LocationInput li = null;
@@ -152,7 +186,7 @@ namespace WeatherKit.Controllers
                 {
                     items = cityState.Split(',');
                     List<string> list = new List<string>();
-                    foreach(string i in items)
+                    foreach (string i in items)
                     {
                         string str = i.Trim();
                         if (!string.IsNullOrEmpty(str))

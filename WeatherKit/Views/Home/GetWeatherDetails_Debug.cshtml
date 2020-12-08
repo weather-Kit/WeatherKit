@@ -1,0 +1,98 @@
+﻿@model WeatherKit.Models.Forecast
+
+@{
+    ViewData["Title"] = "Forecast";
+}
+
+<h1>Forecast</h1>
+<div>
+    <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
+        <label>Search: </label>
+        <input type="text" name="citySelected" placeholder="Enter city or zipcode" width="50">
+        <input id="submit" type="submit" value="Submit" />
+    </form>
+</div>
+
+<hr />
+<div>
+    <h4>@Html.DisplayFor(model => model.name), @Model.sys.country </h4>
+
+    @{
+        string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+        @ViewBag.Time
+    }
+    <img src="@img" />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.name) , @Model.sys.country
+        </dd>
+        <dt class="col-sm-2">
+            Sun
+        </dt>
+        <dd class="col-sm-10">
+            Rise: @Model.sys.SunRise , Set:  @Model.sys.SunSet
+        </dd>
+        <dt class="col-sm-2">
+            Overall
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                string weather = Model.weather[0].main + ", " + Model.weather[0].description;
+                @weather
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Temperature
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                string temp = "";
+                if (Model.main.TempInCelsius.HasValue)
+                {
+                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) , Feels Like: {Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                }
+                else
+                {
+                    temp = $"Temp: {@Model.main.temp} {Model.main.TempUnit} , Feels Like: {Model.main.feels_like} {Model.main.TempUnit}";
+                }
+            }
+            Temp: @temp <br />
+            Pressure: @Model.main.pressure , Humidity: @Model.main.humidity %
+        </dd>
+        <dt class="col-sm-2">
+            Wind
+        </dt>
+        <dd class="col-sm-10">
+            Speed: @Model.wind.speed , Degrees: @Model.wind.deg
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.visibility)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.visibility)
+        </dd>
+        <dt class="col-sm-2">
+            History Temp
+        </dt>
+        <dd class="col-sm-10">
+            Min: @Model.main.temp_min @Model.main.TempUnit , Degrees: @Model.main.temp_max @Model.main.TempUnit
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.coord)
+        </dt>
+        <dd class="col-sm-10">
+            Long: @Model.coord.lon ',  Lat: ' @Model.coord.lat
+        </dd>
+    </dl>
+
+</div>
