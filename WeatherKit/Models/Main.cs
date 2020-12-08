@@ -12,5 +12,12 @@
         
         // Humidity %
         public int humidity { get; set; }
+
+        // Units for the temperature
+        public string TempUnit { get; set; }
+
+        // Temp in C - specially for Standard Unit where we need temp for C & F
+        public double? TempInCelsius { get; set; } 
+        public double? TempFeelsLikeInCelsius { get; set; } 
     }
 }

@@ -10,10 +10,13 @@ namespace WeatherKit.Models
         // Example: WA 
         public string StateCode { get; set; }
 
+        // 2 char code. Example: US
+        public string CountryCode { get; set; }
+
         public string ZipCode { get; set; }
 
-        public long Longitude { get; set; }
+        public double Longitude { get; set; }
 
-        public long Latitude { get; set; }
+        public double Latitude { get; set; }
     }
 }
