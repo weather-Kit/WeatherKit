@@ -43,7 +43,7 @@ namespace WeatherKit.Controllers
 
             if (referer.AbsolutePath == "/")
             {
-                return (IActionResult)_homeController.Index();
+                return _homeController.Index().Result;
             }
             else
             {
