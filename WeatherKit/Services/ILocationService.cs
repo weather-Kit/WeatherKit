@@ -8,8 +8,9 @@ namespace WeatherKit.Services
         public LocationInput GetLocation();
         public void UpdateLocation(LocationInput newLocation);
 
-        public void ReadLocation(HttpContext context);
-        public void WriteLocation(HttpContext context);
+        public void ReadLocation();
+        public void WriteLocation();
         public bool CookieHasData();
+        public System.Net.IPAddress GetIP();
     }
 }

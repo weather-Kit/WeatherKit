@@ -48,30 +48,34 @@ namespace WeatherKit.Controllers
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
-                try
+                var ipAddress = _locationService.GetIP();
+
+                if (ipAddress != null)
                 {
-                    using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
+                    try
                     {
-                        var ipAddress = HttpContext.Connection.RemoteIpAddress;    
+                        using var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb");
+
                         //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
                         var city = reader.City(ipAddress);
 
                         LocationInput location = new LocationInput();
-                        if ((city.Location.Longitude != null) && (city.Location.Latitude != null))
+                        if ((city != null) && (city.Location.Longitude != null) && (city.Location.Latitude != null))
                         {
                             location.Longitude = (double)city.Location.Longitude;
                             location.Latitude = (double)city.Location.Latitude;
 
                             _locationService.UpdateLocation(location);
-                            _locationService.WriteLocation(HttpContext);
-                            _locationService.ReadLocation(HttpContext); //sets CookieHasData to true
+                            _locationService.WriteLocation();
+                            _locationService.ReadLocation(); //sets CookieHasData to true
 
                             weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
                             weatherForecast.TimeZone = city.Location.TimeZone;
                         }
                     }
+                    catch { }
                 }
-                catch { }
+
             }
 
             if (weatherForecast != null)
