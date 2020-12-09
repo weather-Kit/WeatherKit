@@ -32,12 +32,12 @@ namespace WeatherKit
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
             // Add HttpContext accessibility
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add services as DependencyInjection
-            services.AddSingleton<ISettingService, SettingService>();
-            services.AddSingleton<ILocationService, LocationService>();
-            services.AddSingleton<IWeatherAPIService, WeatherAPIService>();
+            services.AddScoped<ISettingService, SettingService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IWeatherAPIService, WeatherAPIService>();
             services.AddMvc().AddControllersAsServices();
 
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using WeatherKit.Models;
 
 namespace WeatherKit.Services
@@ -12,5 +13,8 @@ namespace WeatherKit.Services
         public void WriteLocation();
         public bool CookieHasData();
         public System.Net.IPAddress GetIP();
+        public List<CityOptions> GetCityOptionsList();
+        public void ReadCityOptionsList();
+
     }
 }

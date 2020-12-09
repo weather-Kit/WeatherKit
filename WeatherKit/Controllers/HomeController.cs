@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace WeatherKit.Controllers
             _weatherAPIService = weatherAPIService;
             _httpContextAccessor = httpContextAccessor;
             _hostingEnvironment = webHostEnvironment;
+            cityOptionsList = new List<CityOptions>();
         }
 
         public async Task<IActionResult> Index()
@@ -48,15 +50,14 @@ namespace WeatherKit.Controllers
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
-                var ipAddress = _locationService.GetIP();
+                var ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+                _logger.LogInformation($"Remote IP: {ipAddress}");
 
                 if (ipAddress != null)
                 {
                     try
                     {
                         using var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb");
-
-                        //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
                         var city = reader.City(ipAddress);
 
                         LocationInput location = new LocationInput();
@@ -73,7 +74,10 @@ namespace WeatherKit.Controllers
                             weatherForecast.TimeZone = city.Location.TimeZone;
                         }
                     }
-                    catch { }
+                    catch(Exception ex) {
+                        _logger.LogInformation($"Index Exception: {ex.Message} {ex.StackTrace}");
+                        throw ex;
+                    }
                 }
 
             }
@@ -93,7 +97,7 @@ namespace WeatherKit.Controllers
                 ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
 
                 return View("GetWeatherDetails", weatherForecast);
-            } 
+            }
 
             return View();
         }
@@ -110,7 +114,7 @@ namespace WeatherKit.Controllers
             using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
             {
                 string json = r.ReadToEnd();
-                cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);
+                cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);               
             }
 
             foreach (var city in cityInfoList)
@@ -125,6 +129,14 @@ namespace WeatherKit.Controllers
             return Json(cityOptionsList);
         }
 
+        public JsonResult CityList(string userInput)
+        {
+
+            cityOptionsList = _locationService.GetCityOptionsList().Where(c => c.name.Contains(userInput)).ToList();
+
+            return Json(cityOptionsList);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetWeatherDetails(string citySelected, string zipCode)
@@ -133,18 +145,18 @@ namespace WeatherKit.Controllers
             if (!string.IsNullOrEmpty(citySelected))
             {
                 string[] cityInfoArray = citySelected.Split(',');
-                li.City = cityInfoArray[0];
+                li.City = cityInfoArray[0].Trim();
 
                 if (cityInfoArray.Count() == 3)
                 {
-                    li.StateCode = cityInfoArray[1];
-                    li.CountryCode = cityInfoArray[2];
+                    li.StateCode = cityInfoArray[1].Trim();
+                    li.CountryCode = cityInfoArray[2].Trim();
                 }
             }
 
             if (!string.IsNullOrEmpty(zipCode))
             {
-                li.ZipCode = zipCode;
+                li.ZipCode = zipCode.Trim();
             }
 
             var weatherForecast = await _weatherAPIService.GetWeatherForecasts(li);
