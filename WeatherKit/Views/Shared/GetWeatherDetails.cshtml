@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewData["Title"] = "Forecast";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model WeatherKit.Models.Forecast
+<div>
+    <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
+        <label>Search: </label>
+        <input list="city" type="text" name="citySelected" placeholder="Enter city or zipcode" width="50">
+        <datalist id="city">
+        </datalist>
+        <input class="bg-primary text-white btn" id="submit" type="submit" value="Submit" />
+        <br />
+        <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>
+    </form>
+
+</div>
+
+<div>
+    <H3 class="display-4 text-center">@Model.name, @Model.sys.country </H3>
+    <div class="jumbotron bg-light mx-auto" style="width:600px">
+        <div class="row">
+            <div class="col">
+                <h6> Weather: <small>@Model.weather[0].description</small> </h6>
+                <h6>Time: <small> @ViewBag.Time</small></h6>
+
+                @{ string img = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@4x.png";
+                }
+                <img src="@img" />
+            </div>
+
+            <div class="col">
+                @{ string temp = "";
+                    if (Model.main.TempInCelsius.HasValue)
+                    {
+                        temp = $"{@Model.main.temp} {Model.main.TempUnit} ({Model.main.TempInCelsius} C) ";
+                    }
+                    else
+                    {
+                        temp = $"{@Model.main.temp} {Model.main.TempUnit} ";
+
+                    }
+
+                }
+                @{ string feels = "";
+
+                    if (Model.main.TempInCelsius.HasValue)
+                    {
+                        feels = $"{Model.main.feels_like} {Model.main.TempUnit} ({Model.main.TempFeelsLikeInCelsius} C)";
+                    }
+                    else
+                    {
+                        feels = $"{Model.main.feels_like} {Model.main.TempUnit}";
+
+                    }}
+                <h6>Temp:<small> @temp </small></h6>
+
+                <h6>Feels Like: <small> @feels</small></h6>
+                <br />
+
+                <h6>
+                    History Temp:<br />
+                    Min: <small>@Model.main.temp_min @Model.main.TempUnit</small> ,<br />
+                    Degrees:<small> @Model.main.temp_max @Model.main.TempUnit,</small>
+                </h6>
+            </div>
+
+            <div class="col">
+                <h6>Pressure: <small>@Model.main.pressure</small></h6>
+
+                <h6>Humidity:  <small>@Model.main.humidity%</small> </h6>
+
+                <h6>Wind speed: <small>@Model.wind.speed mph </small> </h6>
+
+                <h6>Degrees: <small>@Model.wind.deg</small></h6>
+
+                <h6>Visibility: <small>@Model.visibility</small></h6>
+
+                <h6>Sunrise: <small>@ViewBag.SunRiseStr</small></h6>
+
+                <h6>Sunset: <small>@ViewBag.SunSetStr</small></h6>
+
+                <h6>Coord: <small>@Model.coord.lon Long, @Model.coord.lat Lat</small></h6>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

@@ -48,40 +48,51 @@ namespace WeatherKit.Controllers
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
-                try
+                var ipAddress = _locationService.GetIP();
+
+                if (ipAddress != null)
                 {
-                    using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
+                    try
                     {
-                        var ipAddress = HttpContext.Connection.RemoteIpAddress;    
-                        ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
+                        using var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb");
+
+                        //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
                         var city = reader.City(ipAddress);
 
                         LocationInput location = new LocationInput();
-                        if ((city.Location.Longitude != null) && (city.Location.Latitude != null))
+                        if ((city != null) && (city.Location.Longitude != null) && (city.Location.Latitude != null))
                         {
                             location.Longitude = (double)city.Location.Longitude;
                             location.Latitude = (double)city.Location.Latitude;
 
                             _locationService.UpdateLocation(location);
-                            _locationService.WriteLocation(HttpContext);
-                            _locationService.ReadLocation(HttpContext); //sets CookieHasData to true
+                            _locationService.WriteLocation();
+                            _locationService.ReadLocation(); //sets CookieHasData to true
 
                             weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
                             weatherForecast.TimeZone = city.Location.TimeZone;
                         }
                     }
+                    catch { }
                 }
-                catch { }
+
             }
 
             if (weatherForecast != null)
             {
-                string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                    weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+                string dtFormat = "MMM dd, yyyy HH:mm";
+                string sunRiseSetFormat = "HH:mm";
+                if (! _settingService.GetSetting().Is24HourTimeFormat)
+                {
+                    dtFormat = "MMM dd, yyyy hh:mm tt";
+                    sunRiseSetFormat = "hh:mm tt";
+                }
+                
+                ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
+                ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
+                ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
 
-                ViewBag.Time = time;
-
-                return View("GetWeatherDetails_Debug", weatherForecast);
+                return View("GetWeatherDetails", weatherForecast);
             } 
 
             return View();
@@ -143,15 +154,22 @@ namespace WeatherKit.Controllers
                 return await Index();    
             }
 
-            string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+            string dtFormat = "MMM dd, yyyy HH:mm";
+            string sunRiseSetFormat = "HH:mm";
+            if (!_settingService.GetSetting().Is24HourTimeFormat)
+            {
+                dtFormat = "MMM dd, yyyy hh:mm tt";
+                sunRiseSetFormat = "hh:mm tt";
+            }
 
-            ViewBag.Time = time;
+            ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
+            ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
+            ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
 
             // Save the location globally & to cookie
             _locationService.UpdateLocation(li);
 
-            return View("GetWeatherDetails_Debug", weatherForecast);
+            return View("GetWeatherDetails", weatherForecast);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

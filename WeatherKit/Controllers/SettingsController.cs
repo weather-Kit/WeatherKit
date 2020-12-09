@@ -17,7 +17,8 @@ namespace WeatherKit.Controllers
         static private Uri referer;
 
         public SettingsController(IWeatherAPIService weatherAPIService, 
-            ISettingService settingService, ILocationService locationService, HomeController homeController)
+            ISettingService settingService, ILocationService locationService, 
+            HomeController homeController)
         {
             _weatherAPIService = weatherAPIService;
             _settingService = settingService;
