@@ -53,7 +53,7 @@ namespace WeatherKit.Controllers
                     using (var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb"))
                     {
                         var ipAddress = HttpContext.Connection.RemoteIpAddress;    
-                        ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
+                        //ipAddress = System.Net.IPAddress.Parse("104.199.123.16");
                         var city = reader.City(ipAddress);
 
                         LocationInput location = new LocationInput();
@@ -76,12 +76,19 @@ namespace WeatherKit.Controllers
 
             if (weatherForecast != null)
             {
-                string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                    weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+                string dtFormat = "MMM dd, yyyy HH:mm";
+                string sunRiseSetFormat = "HH:mm";
+                if (! _settingService.GetSetting().Is24HourTimeFormat)
+                {
+                    dtFormat = "MMM dd, yyyy hh:mm tt";
+                    sunRiseSetFormat = "hh:mm tt";
+                }
+                
+                ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
+                ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
+                ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
 
-                ViewBag.Time = time;
-
-                return View("GetWeatherDetails_Debug", weatherForecast);
+                return View("GetWeatherDetails", weatherForecast);
             } 
 
             return View();
@@ -143,15 +150,22 @@ namespace WeatherKit.Controllers
                 return await Index();    
             }
 
-            string time = _settingService.GetSetting().Is24HourTimeFormat ?
-                weatherForecast.Date.ToString("HH:mm") : weatherForecast.Date.ToString("hh:mm tt");
+            string dtFormat = "MMM dd, yyyy HH:mm";
+            string sunRiseSetFormat = "HH:mm";
+            if (!_settingService.GetSetting().Is24HourTimeFormat)
+            {
+                dtFormat = "MMM dd, yyyy hh:mm tt";
+                sunRiseSetFormat = "hh:mm tt";
+            }
 
-            ViewBag.Time = time;
+            ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
+            ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
+            ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
 
             // Save the location globally & to cookie
             _locationService.UpdateLocation(li);
 
-            return View("GetWeatherDetails_Debug", weatherForecast);
+            return View("GetWeatherDetails", weatherForecast);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
