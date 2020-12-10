@@ -23,13 +23,13 @@ namespace WeatherKit.Controllers
         private readonly IWeatherAPIService _weatherAPIService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ICityListService _cityListService;
         private LocationInput li = new LocationInput();
-        private List<CityOptions> cityOptionsList = new List<CityOptions>();
-        private List<CityInfo> cityInfoList = null;
 
         public HomeController(ILogger<HomeController> logger, 
             ISettingService settingService, IWeatherAPIService weatherAPIService, 
-            ILocationService locationService, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment)
+            ILocationService locationService, IHttpContextAccessor httpContextAccessor, 
+            IWebHostEnvironment webHostEnvironment, ICityListService cityListService)
         {
             _logger = logger;
             _settingService = settingService;
@@ -37,7 +37,7 @@ namespace WeatherKit.Controllers
             _weatherAPIService = weatherAPIService;
             _httpContextAccessor = httpContextAccessor;
             _hostingEnvironment = webHostEnvironment;
-            cityOptionsList = new List<CityOptions>();
+            _cityListService = cityListService;
         }
 
         public async Task<IActionResult> Index()
@@ -107,34 +107,35 @@ namespace WeatherKit.Controllers
             return View();
         }
 
+        //[HttpGet]
+        //public JsonResult CityList()
+        //{
+
+        //    using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
+        //    {
+        //        string json = r.ReadToEnd();
+        //        cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);               
+        //    }
+
+        //    foreach (var city in cityInfoList)
+        //    {
+        //        CityOptions co = new CityOptions();
+        //        co.name = city.name;
+        //        co.state = city.state;
+        //        co.country = city.country;
+        //        cityOptionsList.Add(co);
+        //    }
+
+        //    return Json(cityOptionsList);
+        //}
+
         [HttpGet]
         public JsonResult CityList()
         {
 
-            using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
-            {
-                string json = r.ReadToEnd();
-                cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);               
-            }
-
-            foreach (var city in cityInfoList)
-            {
-                CityOptions co = new CityOptions();
-                co.name = city.name;
-                co.state = city.state;
-                co.country = city.country;
-                cityOptionsList.Add(co);
-            }
-
-            return Json(cityOptionsList);
-        }
-
-        public JsonResult CityList(string userInput)
-        {
-
-            cityOptionsList = _locationService.GetCityOptionsList().Where(c => c.name.Contains(userInput)).ToList();
-
-            return Json(cityOptionsList);
+            //cityOptionsList = _locationService.GetCityOptionsList();
+            //.Where(c => c.name.Contains(userInput)).ToList()
+            return Json(_cityListService.GetCityOptionsList());
         }
 
 

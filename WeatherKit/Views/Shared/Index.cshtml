@@ -33,7 +33,7 @@
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get" class="jumbotron bg-light align-items-center text-center mx-auto" style="width:366px">
         <span>
             <label for="city" style="margin-right: 110px; font-weight: 600;">Select City:</label><br />
-            <input list="city" name="citySelected" type="text" placeholder="Search by city name">
+            <input id="cityInput" list="city" name="citySelected" type="text" placeholder="Search by city name">
         </span>
         <datalist id="city">
         </datalist>

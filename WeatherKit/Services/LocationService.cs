@@ -12,7 +12,6 @@ namespace WeatherKit.Services
         private bool cookieHasData = false;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private System.Net.IPAddress IPAddress;
-        private List<CityOptions> cityOptionsList;
 
 
         public LocationService(IHttpContextAccessor httpContextAccessor)
@@ -20,7 +19,6 @@ namespace WeatherKit.Services
             //currentLocation = new LocationInput();
             _httpContextAccessor = httpContextAccessor;
 
-            ReadCityOptionsList();
             // Read location fromthe cookie
             ReadLocation();
             IPAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
@@ -48,11 +46,6 @@ namespace WeatherKit.Services
         public System.Net.IPAddress GetIP()
         {
             return IPAddress;
-        }
-
-        public List<CityOptions> GetCityOptionsList()
-        {
-            return cityOptionsList;
         }
 
         // Updates currentLocation & cookie
@@ -108,29 +101,6 @@ namespace WeatherKit.Services
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("Latitude", currentLocation.Latitude.ToString(), cookieOptions);
             if (currentLocation.Longitude != 0)
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("Longitude", currentLocation.Longitude.ToString(), cookieOptions);
-        }
-
-        public void ReadCityOptionsList()
-        {
-            cityOptionsList = new List<CityOptions>();
-            List<CityInfo> tempList = new List<CityInfo>();
-
-            using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
-            {
-                string json = r.ReadToEnd();
-                tempList = JsonConvert.DeserializeObject<List<CityInfo>>(json);
-            }
-
-            foreach (var city in tempList)
-            {
-                CityOptions co = new CityOptions();
-                co.name = city.name;
-                co.state = city.state;
-                co.country = city.country;
-                cityOptionsList.Add(co);
-            }
-
-            return;
         }
     }
 }

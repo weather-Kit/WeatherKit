@@ -8,7 +8,7 @@
 <div>
     <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
         <label>Search: </label>
-        <input list="city" type="text" name="citySelected" placeholder="City" width="50">
+        <input id="cityInput" list="city" type="text" name="citySelected" placeholder="City" width="50">
         <datalist id="city">
         </datalist>
         <input type="text" name="zipCode" placeholder="Zip Code">
