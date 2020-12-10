@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using WeatherKit.Models;
@@ -31,15 +30,10 @@ namespace WeatherKit.Services
 
             foreach (var city in tempList)
             {
-                CityOptions co = new CityOptions();
-                co.name = city.name;
-                co.state = city.state;
-                co.country = city.country;
-                cityOptionsList.Add(co);
+                cityOptionsList.Add(new CityOptions(city.name, city.state, city.country));
             }
 
             return;
         }
-
     }
 }

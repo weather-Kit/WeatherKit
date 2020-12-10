@@ -1,32 +1,5 @@
 ﻿@{ ViewData["Title"] = "Home"; }
 
-@* Old code from unstable
-    <div>
-        <h1 class="display-4">Welcome to Weatherkit</h1>
-        <br />
-        <form asp-controller="Home" asp-action="GetWeatherDetails" method="get">
-            <span>
-                <label for="city" style="margin-right: 110px;">Select City:</label><br />
-                <input list="city" name="citySelected" type="text" placeholder="Search by city name">
-            </span>
-            <datalist id="city">
-            </datalist>
-            <br />
-            <br />
-            <p> or </p>
-            <span>
-                <label for="city" style="margin-right: 80px;">Enter Zip Code:</label><br />
-                <input type="text" name="zipCode" placeholder="5 digits only">
-            </span>
-            <br />
-            <label style="font-size: small; color: red;">@ViewBag.InvalidMsg</label>
-            <br />
-            <input id="submit" type="submit" value="Submit" />
-        </form>
-    </div>*@
-
-@*@{ ViewData["Title"] = "Home Page"; }*@
-
 <div>
     <h1 class="display-4">Welcome to Weatherkit</h1>
     <br />

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using MaxMind.GeoIP2;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WeatherKit.Models;
 using WeatherKit.Services;
 
@@ -21,22 +15,18 @@ namespace WeatherKit.Controllers
         private readonly ISettingService _settingService;
         private readonly ILocationService _locationService;
         private readonly IWeatherAPIService _weatherAPIService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ICityListService _cityListService;
         private LocationInput li = new LocationInput();
 
         public HomeController(ILogger<HomeController> logger, 
             ISettingService settingService, IWeatherAPIService weatherAPIService, 
-            ILocationService locationService, IHttpContextAccessor httpContextAccessor, 
-            IWebHostEnvironment webHostEnvironment, ICityListService cityListService)
+            ILocationService locationService, 
+            ICityListService cityListService)
         {
             _logger = logger;
             _settingService = settingService;
             _locationService = locationService;
             _weatherAPIService = weatherAPIService;
-            _httpContextAccessor = httpContextAccessor;
-            _hostingEnvironment = webHostEnvironment;
             _cityListService = cityListService;
         }
 
@@ -50,51 +40,17 @@ namespace WeatherKit.Controllers
             }
             else // If there are no cookies set, try to get user's location from their IP address
             {
-                var ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
-                _logger.LogInformation($"Remote IP: {ipAddress}");
-
-                if (ipAddress != null)
+                // Try to retrieve user's geolocation and store it in cookie
+                LocationInput userLocation = _locationService.RetrieveLocationFromDb();
+                if (userLocation != null)
                 {
-                    try
-                    {
-                        using var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb");
-                        var city = reader.City(ipAddress);
-
-                        LocationInput location = new LocationInput();
-                        if ((city != null) && (city.Location.Longitude != null) && (city.Location.Latitude != null))
-                        {
-                            location.Longitude = (double)city.Location.Longitude;
-                            location.Latitude = (double)city.Location.Latitude;
-
-                            _locationService.UpdateLocation(location);
-                            _locationService.WriteLocation();
-                            _locationService.ReadLocation(); //sets CookieHasData to true
-
-                            weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
-                            weatherForecast.TimeZone = city.Location.TimeZone;
-                        }
-                    }
-                    catch(Exception ex) {
-                        _logger.LogInformation($"Index Exception: {ex.Message} {ex.StackTrace}");
-                        throw ex;
-                    }
+                    weatherForecast = await _weatherAPIService.GetWeatherForecasts(_locationService.GetLocation());
                 }
-
             }
 
             if (weatherForecast != null)
             {
-                string dtFormat = "MMM dd, yyyy HH:mm";
-                string sunRiseSetFormat = "HH:mm";
-                if (! _settingService.GetSetting().Is24HourTimeFormat)
-                {
-                    dtFormat = "MMM dd, yyyy hh:mm tt";
-                    sunRiseSetFormat = "hh:mm tt";
-                }
-                
-                ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
-                ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
-                ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
+                SetDateTimeInViewBag(weatherForecast);
 
                 return View("GetWeatherDetails", weatherForecast);
             }
@@ -107,34 +63,9 @@ namespace WeatherKit.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public JsonResult CityList()
-        //{
-
-        //    using (StreamReader r = new StreamReader("wwwroot/json/city.list.json"))
-        //    {
-        //        string json = r.ReadToEnd();
-        //        cityInfoList = JsonConvert.DeserializeObject<List<CityInfo>>(json);               
-        //    }
-
-        //    foreach (var city in cityInfoList)
-        //    {
-        //        CityOptions co = new CityOptions();
-        //        co.name = city.name;
-        //        co.state = city.state;
-        //        co.country = city.country;
-        //        cityOptionsList.Add(co);
-        //    }
-
-        //    return Json(cityOptionsList);
-        //}
-
         [HttpGet]
         public JsonResult CityList()
         {
-
-            //cityOptionsList = _locationService.GetCityOptionsList();
-            //.Where(c => c.name.Contains(userInput)).ToList()
             return Json(_cityListService.GetCityOptionsList());
         }
 
@@ -167,17 +98,7 @@ namespace WeatherKit.Controllers
                 return await Index();    
             }
 
-            string dtFormat = "MMM dd, yyyy HH:mm";
-            string sunRiseSetFormat = "HH:mm";
-            if (!_settingService.GetSetting().Is24HourTimeFormat)
-            {
-                dtFormat = "MMM dd, yyyy hh:mm tt";
-                sunRiseSetFormat = "hh:mm tt";
-            }
-
-            ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
-            ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
-            ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
+            SetDateTimeInViewBag(weatherForecast);
 
             // Save the location globally & to cookie
             _locationService.UpdateLocation(li);
@@ -191,49 +112,20 @@ namespace WeatherKit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private LocationInput IsInputValid(string cityState, string zipCode)
+
+        private void SetDateTimeInViewBag(Forecast weatherForecast)
         {
-            LocationInput li = null;
-
-            if (!string.IsNullOrEmpty(zipCode))
+            string dtFormat = "MMM dd, yyyy HH:mm";
+            string sunRiseSetFormat = "HH:mm";
+            if (!_settingService.GetSetting().Is24HourTimeFormat)
             {
-                li = new LocationInput();
-                li.ZipCode = zipCode.Trim();
+                dtFormat = "MMM dd, yyyy hh:mm tt";
+                sunRiseSetFormat = "hh:mm tt";
             }
 
-            if (!string.IsNullOrEmpty(cityState))
-            {
-                if (li == null)
-                    li = new LocationInput();
-
-                string[] items;
-                if (cityState.Contains(','))
-                {
-                    items = cityState.Split(',');
-                    List<string> list = new List<string>();
-                    foreach (string i in items)
-                    {
-                        string str = i.Trim();
-                        if (!string.IsNullOrEmpty(str))
-                            list.Add(str);
-                    }
-
-                    if (list.Count == 0)
-                        return li;
-
-                    li.City = list[0];
-                    if (list.Count > 1)
-                        li.StateCode = list[1];
-                    if (list.Count > 2)
-                        li.CountryCode = list[2];
-                }
-                else
-                {
-                    li.City = cityState;
-                }
-            }
-
-            return li;
+            ViewBag.Time = weatherForecast.Date.ToString(dtFormat);
+            ViewBag.SunRiseStr = weatherForecast.sys.SunRise.ToString(sunRiseSetFormat);
+            ViewBag.SunSetStr = weatherForecast.sys.SunSet.ToString(sunRiseSetFormat);
         }
     }
 }

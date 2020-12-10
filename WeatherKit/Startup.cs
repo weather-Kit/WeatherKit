@@ -1,7 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,16 +31,14 @@ namespace WeatherKit
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
             // Add HttpContext accessibility
-            //services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
 
             // Add services as DependencyInjection
+            services.AddSingleton<ICityListService, CityListService>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IWeatherAPIService, WeatherAPIService>();
             services.AddMvc().AddControllersAsServices();
-            services.AddSingleton<ICityListService, CityListService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
+﻿using MaxMind.GeoIP2;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
 using WeatherKit.Models;
 
 namespace WeatherKit.Services
@@ -9,15 +9,17 @@ namespace WeatherKit.Services
     public class LocationService : ILocationService
     {
         private LocationInput currentLocation;
+        private System.Net.IPAddress IPAddress;
         private bool cookieHasData = false;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private System.Net.IPAddress IPAddress;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-
-        public LocationService(IHttpContextAccessor httpContextAccessor)
+        public LocationService(IHttpContextAccessor httpContextAccessor,
+            IWebHostEnvironment webHostEnvironment)
         {
             //currentLocation = new LocationInput();
             _httpContextAccessor = httpContextAccessor;
+            _hostingEnvironment = webHostEnvironment;
 
             // Read location fromthe cookie
             ReadLocation();
@@ -47,6 +49,42 @@ namespace WeatherKit.Services
         {
             return IPAddress;
         }
+
+        // Retrieve user's  GeoLocation
+
+        public LocationInput RetrieveLocationFromDb()
+        {
+            LocationInput location = null;
+            var ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+
+            if (ipAddress != null)
+            {
+                try
+                {
+                    using var reader = new DatabaseReader(_hostingEnvironment.ContentRootPath + "\\GeoLite2-City.mmdb");
+                    var city = reader.City(ipAddress);
+
+                    location = new LocationInput();
+                    if ((city != null) && (city.Location.Longitude != null) && (city.Location.Latitude != null))
+                    {
+                        location.Longitude = (double)city.Location.Longitude;
+                        location.Latitude = (double)city.Location.Latitude;
+
+                        UpdateLocation(location);
+                        WriteLocation();
+                        ReadLocation(); //sets CookieHasData to true
+                    }
+                }
+                catch
+                {
+                    location = null;
+                }
+            }
+
+            return location;
+        }
+
+        #region "Cookie Management"
 
         // Updates currentLocation & cookie
         public void UpdateLocation(LocationInput newLocation)
@@ -88,7 +126,7 @@ namespace WeatherKit.Services
                 return;
 
             CookieOptions cookieOptions = new CookieOptions();
-            //cookieOptions.Domain = "https://weatherkit.azurewebsites.net"; // .weatherkit.azurewebsites.net
+            //cookieOptions.Domain = ".localhost;
             cookieOptions.Expires = System.DateTime.Now.AddDays(1);
 
             if (!string.IsNullOrEmpty(currentLocation.City))
@@ -102,5 +140,7 @@ namespace WeatherKit.Services
             if (currentLocation.Longitude != 0)
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("Longitude", currentLocation.Longitude.ToString(), cookieOptions);
         }
+
+        #endregion
     }
 }

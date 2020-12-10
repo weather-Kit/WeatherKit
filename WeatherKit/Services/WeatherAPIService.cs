@@ -13,7 +13,7 @@ namespace WeatherKit.Services
         private readonly string meterBySecUnit = "meter/sec";
         private readonly string milesByhourUnit = "miles/hour";
 
-        public string JSONContent { get; set; }
+        private string JSONContent;
         private string URL;
 
         public WeatherAPIService(IHttpClientFactory httpClientFactory,

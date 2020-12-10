@@ -49,7 +49,7 @@ namespace WeatherKit.Services
         public void WriteSetting(HttpContext context)
         {
             CookieOptions cookieOptions = new CookieOptions();
-            cookieOptions.Domain = ".localhost";
+            //cookieOptions.Domain = ".localhost";
             cookieOptions.Expires = System.DateTime.Now.AddDays(1);
 
             context.Response.Cookies.Append("Is24HourTimeFormat", currentSetting.Is24HourTimeFormat.ToString(), cookieOptions);
